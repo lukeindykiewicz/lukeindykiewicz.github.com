@@ -14,9 +14,9 @@ tagline:
 author : 
   name : Lukasz Indykiewicz
   email : lukasz.indykiewicz@gmail.com
-  github : username
-  twitter : username
-  feedburner : feedname
+  github : lukeindykiewicz
+  twitter : lukeindykiewicz
+#  feedburner : feedname
 
 # The production_url is only used when full-domain names are needed
 # such as sitemap.txt 
