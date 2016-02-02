@@ -6,16 +6,149 @@
     <description>Recent content on luekindykiewicz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Sun, 24 Jan 2016 19:37:23 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 26 Jan 2016 18:27:31 +0100</lastBuildDate>
     <atom:link href="https://lukeindykiewicz.github.com/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>first</title>
-      <link>https://lukeindykiewicz.github.com/blog/first/</link>
-      <pubDate>Sun, 24 Jan 2016 19:37:23 +0100</pubDate>
+      <title>sbt search maven plugin</title>
+      <link>https://lukeindykiewicz.github.com/blog/sbt-search-maven-plugin/</link>
+      <pubDate>Tue, 26 Jan 2016 18:27:31 +0100</pubDate>
       
-      <guid>https://lukeindykiewicz.github.com/blog/first/</guid>
-      <description>&lt;p&gt;Hello world :)&lt;/p&gt;
+      <guid>https://lukeindykiewicz.github.com/blog/sbt-search-maven-plugin/</guid>
+      <description>
+
+&lt;h1 id=&#34;what:1e22f624557bee0f0802330e0bc892fb&#34;&gt;What&lt;/h1&gt;
+
+&lt;p&gt;This is a blog post about sbt plugin to query search.maven.org&lt;/p&gt;
+
+&lt;h1 id=&#34;tl-dr:1e22f624557bee0f0802330e0bc892fb&#34;&gt;tl;dr&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/blstream/sbt-search-maven-plugin&#34;&gt;show me the code&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;why:1e22f624557bee0f0802330e0bc892fb&#34;&gt;Why&lt;/h1&gt;
+
+&lt;p&gt;Most development tasks can be done without leaving your favorite editor/ide nor console.
+Writing Scala code is no different: sbt gives you a lot of power to run code and tests, to package and publish application.&lt;/p&gt;
+
+&lt;p&gt;There is one small thing though, forcing you to leave that environment and go to a browser - to find the exact name of dependency for your project.
+Unless you have super memo powers you will probably have to check the group id for akka, or latest version for any other package that you would like to include in your project.&lt;/p&gt;
+
+&lt;p&gt;To make it even simpler, I created &lt;em&gt;sbt-search-maven-plugin&lt;/em&gt;. Just type &lt;code&gt;searchMaven something&lt;/code&gt; and everything is clear. This prints the same results as &lt;code&gt;search.maven.org&lt;/code&gt; without leaving sbt.&lt;/p&gt;
+
+&lt;h1 id=&#34;plugin-development:1e22f624557bee0f0802330e0bc892fb&#34;&gt;Plugin development&lt;/h1&gt;
+
+&lt;p&gt;In order to make this happen I had to get some knowledge on how to write a sbt plugin. There are three great sources you can check:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://mukis.de/pages/sbt-autoplugins-tutorial/&#34;&gt;SBT AutoPlugins Tutorial&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://eed3si9n.com/testing-sbt-plugins&#34;&gt;testing sbt plugins&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.scala-sbt.org/0.13/docs/Plugins.html&#34;&gt;Plugins in sbt documentation&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;These are all great, but I wanted to create plugin that gets some user input from sbt shell, which is not covered in these references.&lt;/p&gt;
+
+&lt;h1 id=&#34;input-plugin:1e22f624557bee0f0802330e0bc892fb&#34;&gt;Input plugin&lt;/h1&gt;
+
+&lt;p&gt;Plugin code is similar as in above examples, but main &amp;ldquo;entry&amp;rdquo; point for your code is different, as we need InputKey.
+There are some important places to look at:&lt;/p&gt;
+
+&lt;h2 id=&#34;build-sbt:1e22f624557bee0f0802330e0bc892fb&#34;&gt;build.sbt&lt;/h2&gt;
+
+&lt;p&gt;The most important part for developing a plugin is&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span class=&#34;n&#34;&gt;sbtPlugin&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The whole &lt;a href=&#34;https://github.com/blstream/sbt-search-maven-plugin/blob/master/build.sbt&#34;&gt;build.sbt&lt;/a&gt; for this plugin.&lt;/p&gt;
+
+&lt;h2 id=&#34;extends-autoplugin:1e22f624557bee0f0802330e0bc892fb&#34;&gt;extends AutoPlugin&lt;/h2&gt;
+
+&lt;p&gt;The entry point for your code should be placed in an object that extends &lt;code&gt;sbt.AutoPlugin&lt;/code&gt;. This in turn should have another object defined: &lt;code&gt;autoImport&lt;/code&gt; with definition of task.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span class=&#34;k&#34;&gt;object&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;autoImport&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;k&#34;&gt;lazy&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;val&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;searchMaven&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;InputKey&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;Unit&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;](&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;quot;searchMaven&amp;quot;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;quot;Search maven&amp;quot;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Input key makes it possible to get input provided by user from sbt shell. To write some implementation we need one more thing:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span class=&#34;k&#34;&gt;override&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;lazy&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;val&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;projectSettings&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Seq&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;
+  &lt;span class=&#34;n&#34;&gt;searchMaven&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;search&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;complete&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nc&#34;&gt;DefaultParsers&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;spaceDelimited&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;quot;&amp;lt;arg&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;parsed&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;streams&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;search&lt;/code&gt; from snippet above is a regular Scala function in which we can finally implement our new feature.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sbt.Keys._&lt;/code&gt; contain a lot of useful things that we can use in our code, like &lt;code&gt;scalaVersion&lt;/code&gt; defined in one&amp;rsquo;s project or &lt;code&gt;streams.value.log&lt;/code&gt;, which we use in our plugin to print results to user.&lt;/p&gt;
+
+&lt;p&gt;The whole file can be found &lt;a href=&#34;https://github.com/blstream/sbt-search-maven-plugin/blob/master/src/main/scala/com/blstream/sbtsearchmavenplugin/SbtSearchMavenPlugin.scala&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;additional-sbt-settings:1e22f624557bee0f0802330e0bc892fb&#34;&gt;Additional sbt settings&lt;/h1&gt;
+
+&lt;p&gt;There are two things that should be mentioned here.&lt;/p&gt;
+
+&lt;p&gt;To make your plugin be enabled by default you should add such override:
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span class=&#34;k&#34;&gt;override&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;trigger&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;allRequirements&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+This simply says that this plugin will be activated when all required plugins are present. Plugins, that this plugin depends on, could be defined by overriding def &lt;code&gt;requires&lt;/code&gt; (it&amp;rsquo;s empty by default)&lt;/p&gt;
+
+&lt;p&gt;This plugin doesn&amp;rsquo;t interact with code in project - it just searches for artifacts - so we don&amp;rsquo;t want our code to be run multiple times when it&amp;rsquo;s executed inside multimodule project.
+To avoid this, the additional setting has to be specified:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span class=&#34;n&#34;&gt;aggregate&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;searchMaven&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+This stops the task from running in submodules.&lt;/p&gt;
+
+&lt;h2 id=&#34;for-testing:1e22f624557bee0f0802330e0bc892fb&#34;&gt;for testing&lt;/h2&gt;
+
+&lt;p&gt;If you use version without &lt;code&gt;SNAPSHOT&lt;/code&gt; suffix and you don&amp;rsquo;t want to get warnings about deprecation during packaging your plugin, just add  &lt;code&gt;isSnapshot := true&lt;/code&gt;  to your &lt;code&gt;build.sbt&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;testing-sbt-plugin:1e22f624557bee0f0802330e0bc892fb&#34;&gt;Testing sbt plugin&lt;/h1&gt;
+
+&lt;h2 id=&#34;unit-tests:1e22f624557bee0f0802330e0bc892fb&#34;&gt;unit tests&lt;/h2&gt;
+
+&lt;p&gt;Nothing fancy here, just simple unit test for code that&amp;rsquo;s not related to sbt.&lt;/p&gt;
+
+&lt;h2 id=&#34;scripted:1e22f624557bee0f0802330e0bc892fb&#34;&gt;scripted&lt;/h2&gt;
+
+&lt;p&gt;Scripted is the default mechanism for testing sbt plugins by writing scripts for sbt. Search maven is not building anything,
+so we can just prepare basic script to check whether &lt;code&gt;searchMaven&lt;/code&gt; command is available and executable with a success.&lt;/p&gt;
+
+&lt;p&gt;A special directory structure has to be used. Tests are placed in &lt;code&gt;sbt-test&lt;/code&gt; in &lt;code&gt;src&lt;/code&gt;. Under that directory another two directories have to be created for test group and test itself. The full path looks like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;projectHome&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;src&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sbt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;test&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;testGroup&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;/&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;testName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;In such a path test should be described as:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;plugins.sbt&lt;/code&gt; inside of the project dir that adds plugin to the test project&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;test&lt;/code&gt; file that contains script (test scenario)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;build.sbt&lt;/code&gt; file that describes the test build and an assertions for test. Assertions are written in form of the sbt tasks.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Compare the &lt;a href=&#34;https://github.com/blstream/sbt-search-maven-plugin/tree/master/src/sbt-test/test-group/usage-help-test&#34;&gt;usage-help-test&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;make-it-available-for-everyone:1e22f624557bee0f0802330e0bc892fb&#34;&gt;Make it available for everyone&lt;/h1&gt;
+
+&lt;p&gt;The best description can be found &lt;a href=&#34;http://www.scala-sbt.org/0.13/docs/Bintray-For-Plugins.html&#34;&gt;here&lt;/a&gt;. The screenshots are a bit outdated, but most of the content is still valid.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/blstream/sbt-search-maven-plugin/blob/master/build.sbt&#34;&gt;build.sbt&lt;/a&gt; can stay simple.&lt;/p&gt;
+
+&lt;h1 id=&#34;contribution:1e22f624557bee0f0802330e0bc892fb&#34;&gt;Contribution&lt;/h1&gt;
+
+&lt;p&gt;You can pick a feature from the future work section in &lt;a href=&#34;https://github.com/blstream/sbt-search-maven-plugin&#34;&gt;readme&lt;/a&gt;,
+implement issue with feature proposal (if any) or fix some bugs. Pull requests are very welcome!&lt;/p&gt;
+
+&lt;h1 id=&#34;summary:1e22f624557bee0f0802330e0bc892fb&#34;&gt;Summary&lt;/h1&gt;
+
+&lt;p&gt;This blog describes how to write a simple sbt plugin, test it and publish it.&lt;/p&gt;
 </description>
     </item>
     
@@ -25,7 +158,11 @@
       <pubDate>Sun, 24 Jan 2016 19:33:17 +0100</pubDate>
       
       <guid>https://lukeindykiewicz.github.com/about/</guid>
-      <description>&lt;p&gt;I&amp;rsquo;m a Scala developer.&lt;/p&gt;
+      <description>&lt;p&gt;I&amp;rsquo;m a Scala developer with passion for coding.&lt;/p&gt;
+
+&lt;p&gt;Scala developer by day and night. Likes new concepts, relies
+on production proven solutions. Always keen to hear about interesting ideas.
+Team player, fast learner and coffee lover.&lt;/p&gt;
 </description>
     </item>
     
