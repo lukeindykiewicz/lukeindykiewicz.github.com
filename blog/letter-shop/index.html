@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Blog">
+
+<base href="https://lukeindykiewicz.github.com/">
+<title>
+
+
+     letter shop 
+
+</title>
+<link rel="canonical" href="https://lukeindykiewicz.github.com/blog/letter-shop/">
+
+
+<script type="text/javascript">
+    var baseURL = 'https:\/\/lukeindykiewicz.github.com\/';
+    var host = baseURL.substring(0, baseURL.length - 1).replace(/\//g, '');
+    if ((host === window.location.host) && (window.location.protocol !== 'https:')) {
+        window.location.protocol = 'https:';
+    }
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="https://lukeindykiewicz.github.com/css/reset.css">
+<link rel="stylesheet" href="https://lukeindykiewicz.github.com/css/pygments.css">
+<link rel="stylesheet" href="https://lukeindykiewicz.github.com/css/main.css">
+
+
+    <link rel="stylesheet" href="https://lukeindykiewicz.github.com/css/override.css">
+
+
+
+
+
+<link rel="shortcut icon"
+
+    href="https://lukeindykiewicz.github.com/img/favico.ico"
+
+>
+
+
+
+
+</head>
+
+
+<body lang="en">
+
+<section class="header">
+    <div class="container">
+        <div class="content">
+            <a href="https://lukeindykiewicz.github.com/"><div class="name">Luke Indykiewicz</div></a>
+            <nav>
+                <ul>
+                    <a href="https://lukeindykiewicz.github.com/blog/"><li>Blog</li></a>
+                    <a href="https://lukeindykiewicz.github.com/about/"><li>About</li></a>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<section class="icons">
+    <div class="container">
+        <div class="content">
+
+        
+            <a href="//github.com/lukeindykiewicz" target="_blank">
+                <i class="icon ion-social-github"></i>
+            </a>
+        
+
+        
+            <a href="//twitter.com/lukeindykiewicz" target="_blank">
+                <i class="icon ion-social-twitter"></i>
+            </a>
+        
+
+        
+            <a href="//linkedin.com/in/lukaszindykiewicz" target="_blank">
+                <i class="icon ion-social-linkedin"></i>
+            </a>
+        
+
+        
+
+        
+
+        
+
+        </div>
+    </div>
+</section>
+
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
+
+    letter shop
+
+</div>
+
+                    <div class="initials"><a href="https://lukeindykiewicz.github.com/">li</a></div>
+                </div>
+                <div class="meta">
+                    <div class="date" title="Wed, 24 Aug 2016, 18:30:50 CEST">24 Aug 2016</div>
+                    <div class="reading-time"><div class="middot"></div>3 minutes read</div>
+                </div>
+            </div>
+            <div class="markdown">
+                
+
+<h1 id="what">What</h1>
+
+<p>This post describes a made up application - Letter Shop, why I created it and how it was done.</p>
+
+<h1 id="tl-dr">tl;dr</h1>
+
+<ul>
+<li><a href="https://github.com/lukeindykiewicz/letter-sh">TCK code</a></li>
+<li><a href="https://github.com/lukeindykiewicz/letter-shop-api">API code</a></li>
+</ul>
+
+<h1 id="why">Why</h1>
+
+<p>Letter Shop is an attempt to make comparison of concepts possible, of course in a very practical way. I wanted to have some api/tests/problem that I can implement with different approaches (like using monads, using event sourcing, etc.). Each approach is best in a particular situation and simple examples, &ldquo;hello worlds&rdquo; show exactly those cases. Then it comes to a real world example and sometimes it&rsquo;s not so sweet. There is <a href="http://todomvc.com/">TodoMVC</a> and <a href="http://www.todobackend.com/">Todo-Backend</a>, but I wanted to have more control over the problem, to make it evolve according to the concepts I&rsquo;m exploring.
+There is also another reason, I want to have this api/tck as my kata for further exploring of programming concepts and languages.</p>
+
+<p>There are two main parts of Letter Shop:</p>
+
+<ul>
+<li>API - this is yaml (swagger) description of endpoints available in the Letter Shop</li>
+<li>TCK - tests for all main features, green means a proper implementation of an API</li>
+</ul>
+
+<h1 id="how">How</h1>
+
+<h2 id="idea">Idea</h2>
+
+<p>I wanted to model something that is a little bit more complicated than todo, but also is easy enough to not loose interest in building it and be able to quickly explain what it does. The main goal is to train/check new programming ideas, not explore business domain. So I took a shop case, as it is a well know situation for everyone. We have cart, things we want to buy and some price. I didn&rsquo;t want to implement a lot of different products in the shop, so I decided that the shop sell letters, like: a,b,c. Sounds stupid, but for this purpose suits very good.</p>
+
+<h2 id="api">API</h2>
+
+<p>Api (<a href="http://lukeindykiewicz.com/letter-shop-api/#/default">swagger ui</a>) contains just few endpoints - basic features of Letter Shop. We can:</p>
+
+<ul>
+<li>add letters to the cart</li>
+<li>replace existing cart with new letters (also clean cart)</li>
+<li>get cart info</li>
+<li>check cart (just checks the price of current cart)</li>
+<li>checkout cart (price, receipt id and cleans cart)</li>
+<li>set price for given letter (default price is 10)</li>
+<li>get all receipts from the system</li>
+</ul>
+
+<p>Yes, everything is public, no user/admin login. It has to be simple.</p>
+
+<p>This is pure CRU (create, read, update) stuff, so I decided to add some price logic. So, as in every shop, there are promotions:</p>
+
+<ul>
+<li>Three for two (only for letter &lsquo;a&rsquo; and &lsquo;X&rsquo;) - when you buy three letters you pay only for two</li>
+<li>Promo code to get 10 percent discount</li>
+</ul>
+
+<p>Read <a href="https://github.com/lukeindykiewicz/letter-shop-tck/blob/master/src/test/scala/lettershop/CheckCartPriceTest.scala">CheckCartPriceTest</a> to check promotion rules exactly.</p>
+
+<h2 id="tck">TCK</h2>
+
+<p><a href="https://github.com/lukeindykiewicz/letter-shop-tck/tree/master/src/test/scala/lettershop">Tests</a> are written in Scala and specs2. They describe high level functionalities for Letter Shop.</p>
+
+<h1 id="what-is-missing">What is missing</h1>
+
+<p>I decided to put Letter Shop online, although I don&rsquo;t know what should be there to make it 1.0 ready. As I mentioned earlier this will probably evolve. On the other hand I think it is enough to start implementing Letter Shop. Things that are planned:</p>
+
+<ul>
+<li>add validation, as this is always a case in business applications</li>
+<li>think of a way to run tests in some CI (tck is a separate project).</li>
+<li>write free monads implementation</li>
+</ul>
+
+<h1 id="implementations">Implementations</h1>
+
+<p>Very simple implementation is already there, just to test the tests. <a href="https://github.com/lukeindykiewicz/letter-shop-classic-scala">Check it</a> if you want.</p>
+
+<h1 id="summary">Summary</h1>
+
+<p>This is a first blog about Letter Shop, the definition that is going to be implemented and descibed in future blog posts.</p>
+
+                <br>
+                <p><a href="https://lukeindykiewicz.github.com/blog/">Back to posts</a></p>
+            </div>
+            <br>
+            <div class="disqus">
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+    var pageTracker = _gat._getTracker("UA-73272302-1");
+    pageTracker._trackPageview();
+} catch(err) {}
+</script>
+
+
+
+</body>
+</html>
+

@@ -124,15 +124,15 @@
             <div class="markdown">
                 
 
-<h1 id="what:1e22f624557bee0f0802330e0bc892fb">What</h1>
+<h1 id="what">What</h1>
 
 <p>This is a blog post about sbt plugin to query search.maven.org</p>
 
-<h1 id="tl-dr:1e22f624557bee0f0802330e0bc892fb">tl;dr</h1>
+<h1 id="tl-dr">tl;dr</h1>
 
 <p><a href="https://github.com/blstream/sbt-search-maven-plugin">show me the code</a></p>
 
-<h1 id="why:1e22f624557bee0f0802330e0bc892fb">Why</h1>
+<h1 id="why">Why</h1>
 
 <p>Most development tasks can be done without leaving your favorite editor/ide nor console.
 Writing Scala code is no different: sbt gives you a lot of power to run code and tests, to package and publish application.</p>
@@ -142,7 +142,7 @@ Unless you have super memo powers you will probably have to check the group id f
 
 <p>To make it even simpler, I created <em>sbt-search-maven-plugin</em>. Just type <code>searchMaven something</code> and everything is clear. This prints the same results as <code>search.maven.org</code> without leaving sbt.</p>
 
-<h1 id="plugin-development:1e22f624557bee0f0802330e0bc892fb">Plugin development</h1>
+<h1 id="plugin-development">Plugin development</h1>
 
 <p>In order to make this happen I had to get some knowledge on how to write a sbt plugin. There are three great sources you can check:</p>
 
@@ -154,26 +154,26 @@ Unless you have super memo powers you will probably have to check the group id f
 
 <p>These are all great, but I wanted to create plugin that gets some user input from sbt shell, which is not covered in these references.</p>
 
-<h1 id="input-plugin:1e22f624557bee0f0802330e0bc892fb">Input plugin</h1>
+<h1 id="input-plugin">Input plugin</h1>
 
 <p>Plugin code is similar as in above examples, but main &ldquo;entry&rdquo; point for your code is different, as we need InputKey.
 There are some important places to look at:</p>
 
-<h2 id="build-sbt:1e22f624557bee0f0802330e0bc892fb">build.sbt</h2>
+<h2 id="build-sbt">build.sbt</h2>
 
 <p>The most important part for developing a plugin is</p>
 
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">sbtPlugin</span> <span class="o">:=</span> <span class="kc">true</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span></span><span class="n">sbtPlugin</span> <span class="o">:=</span> <span class="kc">true</span>
 </code></pre></div>
 
 
 <p>The whole <a href="https://github.com/blstream/sbt-search-maven-plugin/blob/master/build.sbt">build.sbt</a> for this plugin.</p>
 
-<h2 id="extends-autoplugin:1e22f624557bee0f0802330e0bc892fb">extends AutoPlugin</h2>
+<h2 id="extends-autoplugin">extends AutoPlugin</h2>
 
 <p>The entry point for your code should be placed in an object that extends <code>sbt.AutoPlugin</code>. This in turn should have another object defined: <code>autoImport</code> with definition of task.</p>
 
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">object</span> <span class="nc">autoImport</span> <span class="o">{</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span></span><span class="k">object</span> <span class="nc">autoImport</span> <span class="o">{</span>
   <span class="k">lazy</span> <span class="k">val</span> <span class="n">searchMaven</span> <span class="k">=</span> <span class="nc">InputKey</span><span class="o">[</span><span class="kt">Unit</span><span class="o">](</span><span class="s">&quot;searchMaven&quot;</span><span class="o">,</span> <span class="s">&quot;Search maven&quot;</span><span class="o">)</span>
 <span class="o">}</span>
 </code></pre></div>
@@ -181,7 +181,7 @@ There are some important places to look at:</p>
 
 <p>Input key makes it possible to get input provided by user from sbt shell. To write some implementation we need one more thing:</p>
 
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">override</span> <span class="k">lazy</span> <span class="k">val</span> <span class="n">projectSettings</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span></span><span class="k">override</span> <span class="k">lazy</span> <span class="k">val</span> <span class="n">projectSettings</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
   <span class="n">searchMaven</span> <span class="o">:=</span> <span class="n">search</span><span class="o">(</span><span class="n">complete</span><span class="o">.</span><span class="nc">DefaultParsers</span><span class="o">.</span><span class="n">spaceDelimited</span><span class="o">(</span><span class="s">&quot;&lt;arg&gt;&quot;</span><span class="o">).</span><span class="n">parsed</span><span class="o">,</span> <span class="n">streams</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">log</span><span class="o">)</span>
 <span class="o">)</span>
 </code></pre></div>
@@ -193,12 +193,12 @@ There are some important places to look at:</p>
 
 <p>The whole file can be found <a href="https://github.com/blstream/sbt-search-maven-plugin/blob/master/src/main/scala/com/blstream/sbtsearchmavenplugin/SbtSearchMavenPlugin.scala">here</a></p>
 
-<h1 id="additional-sbt-settings:1e22f624557bee0f0802330e0bc892fb">Additional sbt settings</h1>
+<h1 id="additional-sbt-settings">Additional sbt settings</h1>
 
 <p>There are two things that should be mentioned here.</p>
 
 <p>To make your plugin be enabled by default you should add such override:
-<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">override</span> <span class="k">def</span> <span class="n">trigger</span> <span class="k">=</span> <span class="n">allRequirements</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span></span><span class="k">override</span> <span class="k">def</span> <span class="n">trigger</span> <span class="k">=</span> <span class="n">allRequirements</span>
 </code></pre></div>
 
 This simply says that this plugin will be activated when all required plugins are present. Plugins, that this plugin depends on, could be defined by overriding def <code>requires</code> (it&rsquo;s empty by default)</p>
@@ -206,31 +206,31 @@ This simply says that this plugin will be activated when all required plugins ar
 <p>This plugin doesn&rsquo;t interact with code in project - it just searches for artifacts - so we don&rsquo;t want our code to be run multiple times when it&rsquo;s executed inside multimodule project.
 To avoid this, the additional setting has to be specified:</p>
 
-<p><div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">aggregate</span> <span class="n">in</span> <span class="n">searchMaven</span> <span class="o">:=</span> <span class="kc">false</span>
+<p><div class="highlight"><pre><code class="language-scala" data-lang="scala"><span></span><span class="n">aggregate</span> <span class="n">in</span> <span class="n">searchMaven</span> <span class="o">:=</span> <span class="kc">false</span>
 </code></pre></div>
 
 This stops the task from running in submodules.</p>
 
-<h2 id="for-testing:1e22f624557bee0f0802330e0bc892fb">for testing</h2>
+<h2 id="for-testing">for testing</h2>
 
 <p>If you use version without <code>SNAPSHOT</code> suffix and you don&rsquo;t want to get warnings about deprecation during packaging your plugin, just add  <code>isSnapshot := true</code>  to your <code>build.sbt</code>.</p>
 
-<h1 id="testing-sbt-plugin:1e22f624557bee0f0802330e0bc892fb">Testing sbt plugin</h1>
+<h1 id="testing-sbt-plugin">Testing sbt plugin</h1>
 
-<h2 id="unit-tests:1e22f624557bee0f0802330e0bc892fb">unit tests</h2>
+<h2 id="unit-tests">unit tests</h2>
 
 <p>Nothing fancy here, just simple unit test for code that&rsquo;s not related to sbt.</p>
 
-<h2 id="scripted:1e22f624557bee0f0802330e0bc892fb">scripted</h2>
+<h2 id="scripted">scripted</h2>
 
 <p>Scripted is the default mechanism for testing sbt plugins by writing scripts for sbt. Search maven is not building anything,
 so we can just prepare basic script to check whether <code>searchMaven</code> command is available and executable with a success.</p>
 
 <p>A special directory structure has to be used. Tests are placed in <code>sbt-test</code> in <code>src</code>. Under that directory another two directories have to be created for test group and test itself. The full path looks like this:</p>
 
-<p><div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="o">&lt;</span><span class="n">projectHome</span><span class="o">&gt;/</span><span class="n">src</span><span class="o">/</span><span class="n">sbt</span><span class="o">-</span><span class="n">test</span><span class="o">/&lt;</span><span class="n">testGroup</span><span class="o">&gt;/&lt;</span><span class="n">testName</span><span class="o">&gt;</span>
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span></span><span class="o">&lt;</span><span class="n">projectHome</span><span class="o">&gt;/</span><span class="n">src</span><span class="o">/</span><span class="n">sbt</span><span class="o">-</span><span class="n">test</span><span class="o">/&lt;</span><span class="n">testGroup</span><span class="o">&gt;/&lt;</span><span class="n">testName</span><span class="o">&gt;</span>
 </code></pre></div>
-</p>
+
 
 <p>In such a path test should be described as:</p>
 
@@ -242,18 +242,18 @@ so we can just prepare basic script to check whether <code>searchMaven</code> co
 
 <p>Compare the <a href="https://github.com/blstream/sbt-search-maven-plugin/tree/master/src/sbt-test/test-group/usage-help-test">usage-help-test</a></p>
 
-<h1 id="make-it-available-for-everyone:1e22f624557bee0f0802330e0bc892fb">Make it available for everyone</h1>
+<h1 id="make-it-available-for-everyone">Make it available for everyone</h1>
 
 <p>The best description can be found <a href="http://www.scala-sbt.org/0.13/docs/Bintray-For-Plugins.html">here</a>. The screenshots are a bit outdated, but most of the content is still valid.</p>
 
 <p><a href="https://github.com/blstream/sbt-search-maven-plugin/blob/master/build.sbt">build.sbt</a> can stay simple.</p>
 
-<h1 id="contribution:1e22f624557bee0f0802330e0bc892fb">Contribution</h1>
+<h1 id="contribution">Contribution</h1>
 
 <p>You can pick a feature from the future work section in <a href="https://github.com/blstream/sbt-search-maven-plugin">readme</a>,
 implement issue with feature proposal (if any) or fix some bugs. Pull requests are very welcome!</p>
 
-<h1 id="summary:1e22f624557bee0f0802330e0bc892fb">Summary</h1>
+<h1 id="summary">Summary</h1>
 
 <p>This blog describes how to write a simple sbt plugin, test it and publish it.</p>
 

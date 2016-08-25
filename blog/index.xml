@@ -6,8 +6,94 @@
     <description>Recent content in Blog on luekindykiewicz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Tue, 26 Jan 2016 18:27:31 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 24 Aug 2016 18:30:50 +0200</lastBuildDate>
     <atom:link href="https://lukeindykiewicz.github.com/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>letter shop</title>
+      <link>https://lukeindykiewicz.github.com/blog/letter-shop/</link>
+      <pubDate>Wed, 24 Aug 2016 18:30:50 +0200</pubDate>
+      
+      <guid>https://lukeindykiewicz.github.com/blog/letter-shop/</guid>
+      <description>
+
+&lt;h1 id=&#34;what&#34;&gt;What&lt;/h1&gt;
+
+&lt;p&gt;This post describes a made up application - Letter Shop, why I created it and how it was done.&lt;/p&gt;
+
+&lt;h1 id=&#34;tl-dr&#34;&gt;tl;dr&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/lukeindykiewicz/letter-sh&#34;&gt;TCK code&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/lukeindykiewicz/letter-shop-api&#34;&gt;API code&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;why&#34;&gt;Why&lt;/h1&gt;
+
+&lt;p&gt;Letter Shop is an attempt to make comparison of concepts possible, of course in a very practical way. I wanted to have some api/tests/problem that I can implement with different approaches (like using monads, using event sourcing, etc.). Each approach is best in a particular situation and simple examples, &amp;ldquo;hello worlds&amp;rdquo; show exactly those cases. Then it comes to a real world example and sometimes it&amp;rsquo;s not so sweet. There is &lt;a href=&#34;http://todomvc.com/&#34;&gt;TodoMVC&lt;/a&gt; and &lt;a href=&#34;http://www.todobackend.com/&#34;&gt;Todo-Backend&lt;/a&gt;, but I wanted to have more control over the problem, to make it evolve according to the concepts I&amp;rsquo;m exploring.
+There is also another reason, I want to have this api/tck as my kata for further exploring of programming concepts and languages.&lt;/p&gt;
+
+&lt;p&gt;There are two main parts of Letter Shop:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;API - this is yaml (swagger) description of endpoints available in the Letter Shop&lt;/li&gt;
+&lt;li&gt;TCK - tests for all main features, green means a proper implementation of an API&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;how&#34;&gt;How&lt;/h1&gt;
+
+&lt;h2 id=&#34;idea&#34;&gt;Idea&lt;/h2&gt;
+
+&lt;p&gt;I wanted to model something that is a little bit more complicated than todo, but also is easy enough to not loose interest in building it and be able to quickly explain what it does. The main goal is to train/check new programming ideas, not explore business domain. So I took a shop case, as it is a well know situation for everyone. We have cart, things we want to buy and some price. I didn&amp;rsquo;t want to implement a lot of different products in the shop, so I decided that the shop sell letters, like: a,b,c. Sounds stupid, but for this purpose suits very good.&lt;/p&gt;
+
+&lt;h2 id=&#34;api&#34;&gt;API&lt;/h2&gt;
+
+&lt;p&gt;Api (&lt;a href=&#34;http://lukeindykiewicz.com/letter-shop-api/#/default&#34;&gt;swagger ui&lt;/a&gt;) contains just few endpoints - basic features of Letter Shop. We can:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;add letters to the cart&lt;/li&gt;
+&lt;li&gt;replace existing cart with new letters (also clean cart)&lt;/li&gt;
+&lt;li&gt;get cart info&lt;/li&gt;
+&lt;li&gt;check cart (just checks the price of current cart)&lt;/li&gt;
+&lt;li&gt;checkout cart (price, receipt id and cleans cart)&lt;/li&gt;
+&lt;li&gt;set price for given letter (default price is 10)&lt;/li&gt;
+&lt;li&gt;get all receipts from the system&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Yes, everything is public, no user/admin login. It has to be simple.&lt;/p&gt;
+
+&lt;p&gt;This is pure CRU (create, read, update) stuff, so I decided to add some price logic. So, as in every shop, there are promotions:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Three for two (only for letter &amp;lsquo;a&amp;rsquo; and &amp;lsquo;X&amp;rsquo;) - when you buy three letters you pay only for two&lt;/li&gt;
+&lt;li&gt;Promo code to get 10 percent discount&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Read &lt;a href=&#34;https://github.com/lukeindykiewicz/letter-shop-tck/blob/master/src/test/scala/lettershop/CheckCartPriceTest.scala&#34;&gt;CheckCartPriceTest&lt;/a&gt; to check promotion rules exactly.&lt;/p&gt;
+
+&lt;h2 id=&#34;tck&#34;&gt;TCK&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/lukeindykiewicz/letter-shop-tck/tree/master/src/test/scala/lettershop&#34;&gt;Tests&lt;/a&gt; are written in Scala and specs2. They describe high level functionalities for Letter Shop.&lt;/p&gt;
+
+&lt;h1 id=&#34;what-is-missing&#34;&gt;What is missing&lt;/h1&gt;
+
+&lt;p&gt;I decided to put Letter Shop online, although I don&amp;rsquo;t know what should be there to make it 1.0 ready. As I mentioned earlier this will probably evolve. On the other hand I think it is enough to start implementing Letter Shop. Things that are planned:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;add validation, as this is always a case in business applications&lt;/li&gt;
+&lt;li&gt;think of a way to run tests in some CI (tck is a separate project).&lt;/li&gt;
+&lt;li&gt;write free monads implementation&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;implementations&#34;&gt;Implementations&lt;/h1&gt;
+
+&lt;p&gt;Very simple implementation is already there, just to test the tests. &lt;a href=&#34;https://github.com/lukeindykiewicz/letter-shop-classic-scala&#34;&gt;Check it&lt;/a&gt; if you want.&lt;/p&gt;
+
+&lt;h1 id=&#34;summary&#34;&gt;Summary&lt;/h1&gt;
+
+&lt;p&gt;This is a first blog about Letter Shop, the definition that is going to be implemented and descibed in future blog posts.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>sbt search maven plugin</title>
@@ -17,15 +103,15 @@
       <guid>https://lukeindykiewicz.github.com/blog/sbt-search-maven-plugin/</guid>
       <description>
 
-&lt;h1 id=&#34;what:1e22f624557bee0f0802330e0bc892fb&#34;&gt;What&lt;/h1&gt;
+&lt;h1 id=&#34;what&#34;&gt;What&lt;/h1&gt;
 
 &lt;p&gt;This is a blog post about sbt plugin to query search.maven.org&lt;/p&gt;
 
-&lt;h1 id=&#34;tl-dr:1e22f624557bee0f0802330e0bc892fb&#34;&gt;tl;dr&lt;/h1&gt;
+&lt;h1 id=&#34;tl-dr&#34;&gt;tl;dr&lt;/h1&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://github.com/blstream/sbt-search-maven-plugin&#34;&gt;show me the code&lt;/a&gt;&lt;/p&gt;
 
-&lt;h1 id=&#34;why:1e22f624557bee0f0802330e0bc892fb&#34;&gt;Why&lt;/h1&gt;
+&lt;h1 id=&#34;why&#34;&gt;Why&lt;/h1&gt;
 
 &lt;p&gt;Most development tasks can be done without leaving your favorite editor/ide nor console.
 Writing Scala code is no different: sbt gives you a lot of power to run code and tests, to package and publish application.&lt;/p&gt;
@@ -35,7 +121,7 @@ Unless you have super memo powers you will probably have to check the group id f
 
 &lt;p&gt;To make it even simpler, I created &lt;em&gt;sbt-search-maven-plugin&lt;/em&gt;. Just type &lt;code&gt;searchMaven something&lt;/code&gt; and everything is clear. This prints the same results as &lt;code&gt;search.maven.org&lt;/code&gt; without leaving sbt.&lt;/p&gt;
 
-&lt;h1 id=&#34;plugin-development:1e22f624557bee0f0802330e0bc892fb&#34;&gt;Plugin development&lt;/h1&gt;
+&lt;h1 id=&#34;plugin-development&#34;&gt;Plugin development&lt;/h1&gt;
 
 &lt;p&gt;In order to make this happen I had to get some knowledge on how to write a sbt plugin. There are three great sources you can check:&lt;/p&gt;
 
@@ -47,26 +133,26 @@ Unless you have super memo powers you will probably have to check the group id f
 
 &lt;p&gt;These are all great, but I wanted to create plugin that gets some user input from sbt shell, which is not covered in these references.&lt;/p&gt;
 
-&lt;h1 id=&#34;input-plugin:1e22f624557bee0f0802330e0bc892fb&#34;&gt;Input plugin&lt;/h1&gt;
+&lt;h1 id=&#34;input-plugin&#34;&gt;Input plugin&lt;/h1&gt;
 
 &lt;p&gt;Plugin code is similar as in above examples, but main &amp;ldquo;entry&amp;rdquo; point for your code is different, as we need InputKey.
 There are some important places to look at:&lt;/p&gt;
 
-&lt;h2 id=&#34;build-sbt:1e22f624557bee0f0802330e0bc892fb&#34;&gt;build.sbt&lt;/h2&gt;
+&lt;h2 id=&#34;build-sbt&#34;&gt;build.sbt&lt;/h2&gt;
 
 &lt;p&gt;The most important part for developing a plugin is&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span class=&#34;n&#34;&gt;sbtPlugin&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sbtPlugin&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;The whole &lt;a href=&#34;https://github.com/blstream/sbt-search-maven-plugin/blob/master/build.sbt&#34;&gt;build.sbt&lt;/a&gt; for this plugin.&lt;/p&gt;
 
-&lt;h2 id=&#34;extends-autoplugin:1e22f624557bee0f0802330e0bc892fb&#34;&gt;extends AutoPlugin&lt;/h2&gt;
+&lt;h2 id=&#34;extends-autoplugin&#34;&gt;extends AutoPlugin&lt;/h2&gt;
 
 &lt;p&gt;The entry point for your code should be placed in an object that extends &lt;code&gt;sbt.AutoPlugin&lt;/code&gt;. This in turn should have another object defined: &lt;code&gt;autoImport&lt;/code&gt; with definition of task.&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span class=&#34;k&#34;&gt;object&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;autoImport&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;object&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;autoImport&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
   &lt;span class=&#34;k&#34;&gt;lazy&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;val&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;searchMaven&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;InputKey&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;Unit&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;](&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;quot;searchMaven&amp;quot;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;quot;Search maven&amp;quot;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
@@ -74,7 +160,7 @@ There are some important places to look at:&lt;/p&gt;
 
 &lt;p&gt;Input key makes it possible to get input provided by user from sbt shell. To write some implementation we need one more thing:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span class=&#34;k&#34;&gt;override&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;lazy&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;val&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;projectSettings&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Seq&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;override&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;lazy&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;val&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;projectSettings&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Seq&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;
   &lt;span class=&#34;n&#34;&gt;searchMaven&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;search&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;complete&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nc&#34;&gt;DefaultParsers&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;spaceDelimited&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;quot;&amp;lt;arg&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;parsed&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;streams&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
@@ -86,12 +172,12 @@ There are some important places to look at:&lt;/p&gt;
 
 &lt;p&gt;The whole file can be found &lt;a href=&#34;https://github.com/blstream/sbt-search-maven-plugin/blob/master/src/main/scala/com/blstream/sbtsearchmavenplugin/SbtSearchMavenPlugin.scala&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
 
-&lt;h1 id=&#34;additional-sbt-settings:1e22f624557bee0f0802330e0bc892fb&#34;&gt;Additional sbt settings&lt;/h1&gt;
+&lt;h1 id=&#34;additional-sbt-settings&#34;&gt;Additional sbt settings&lt;/h1&gt;
 
 &lt;p&gt;There are two things that should be mentioned here.&lt;/p&gt;
 
 &lt;p&gt;To make your plugin be enabled by default you should add such override:
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span class=&#34;k&#34;&gt;override&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;trigger&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;allRequirements&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;override&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;trigger&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;allRequirements&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 This simply says that this plugin will be activated when all required plugins are present. Plugins, that this plugin depends on, could be defined by overriding def &lt;code&gt;requires&lt;/code&gt; (it&amp;rsquo;s empty by default)&lt;/p&gt;
@@ -99,31 +185,31 @@ This simply says that this plugin will be activated when all required plugins ar
 &lt;p&gt;This plugin doesn&amp;rsquo;t interact with code in project - it just searches for artifacts - so we don&amp;rsquo;t want our code to be run multiple times when it&amp;rsquo;s executed inside multimodule project.
 To avoid this, the additional setting has to be specified:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span class=&#34;n&#34;&gt;aggregate&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;searchMaven&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;aggregate&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;searchMaven&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 This stops the task from running in submodules.&lt;/p&gt;
 
-&lt;h2 id=&#34;for-testing:1e22f624557bee0f0802330e0bc892fb&#34;&gt;for testing&lt;/h2&gt;
+&lt;h2 id=&#34;for-testing&#34;&gt;for testing&lt;/h2&gt;
 
 &lt;p&gt;If you use version without &lt;code&gt;SNAPSHOT&lt;/code&gt; suffix and you don&amp;rsquo;t want to get warnings about deprecation during packaging your plugin, just add  &lt;code&gt;isSnapshot := true&lt;/code&gt;  to your &lt;code&gt;build.sbt&lt;/code&gt;.&lt;/p&gt;
 
-&lt;h1 id=&#34;testing-sbt-plugin:1e22f624557bee0f0802330e0bc892fb&#34;&gt;Testing sbt plugin&lt;/h1&gt;
+&lt;h1 id=&#34;testing-sbt-plugin&#34;&gt;Testing sbt plugin&lt;/h1&gt;
 
-&lt;h2 id=&#34;unit-tests:1e22f624557bee0f0802330e0bc892fb&#34;&gt;unit tests&lt;/h2&gt;
+&lt;h2 id=&#34;unit-tests&#34;&gt;unit tests&lt;/h2&gt;
 
 &lt;p&gt;Nothing fancy here, just simple unit test for code that&amp;rsquo;s not related to sbt.&lt;/p&gt;
 
-&lt;h2 id=&#34;scripted:1e22f624557bee0f0802330e0bc892fb&#34;&gt;scripted&lt;/h2&gt;
+&lt;h2 id=&#34;scripted&#34;&gt;scripted&lt;/h2&gt;
 
 &lt;p&gt;Scripted is the default mechanism for testing sbt plugins by writing scripts for sbt. Search maven is not building anything,
 so we can just prepare basic script to check whether &lt;code&gt;searchMaven&lt;/code&gt; command is available and executable with a success.&lt;/p&gt;
 
 &lt;p&gt;A special directory structure has to be used. Tests are placed in &lt;code&gt;sbt-test&lt;/code&gt; in &lt;code&gt;src&lt;/code&gt;. Under that directory another two directories have to be created for test group and test itself. The full path looks like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;projectHome&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;src&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sbt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;test&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;testGroup&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;/&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;testName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;projectHome&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;src&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sbt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;test&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;testGroup&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;/&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;testName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;In such a path test should be described as:&lt;/p&gt;
 
@@ -135,18 +221,18 @@ so we can just prepare basic script to check whether &lt;code&gt;searchMaven&lt;
 
 &lt;p&gt;Compare the &lt;a href=&#34;https://github.com/blstream/sbt-search-maven-plugin/tree/master/src/sbt-test/test-group/usage-help-test&#34;&gt;usage-help-test&lt;/a&gt;&lt;/p&gt;
 
-&lt;h1 id=&#34;make-it-available-for-everyone:1e22f624557bee0f0802330e0bc892fb&#34;&gt;Make it available for everyone&lt;/h1&gt;
+&lt;h1 id=&#34;make-it-available-for-everyone&#34;&gt;Make it available for everyone&lt;/h1&gt;
 
 &lt;p&gt;The best description can be found &lt;a href=&#34;http://www.scala-sbt.org/0.13/docs/Bintray-For-Plugins.html&#34;&gt;here&lt;/a&gt;. The screenshots are a bit outdated, but most of the content is still valid.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://github.com/blstream/sbt-search-maven-plugin/blob/master/build.sbt&#34;&gt;build.sbt&lt;/a&gt; can stay simple.&lt;/p&gt;
 
-&lt;h1 id=&#34;contribution:1e22f624557bee0f0802330e0bc892fb&#34;&gt;Contribution&lt;/h1&gt;
+&lt;h1 id=&#34;contribution&#34;&gt;Contribution&lt;/h1&gt;
 
 &lt;p&gt;You can pick a feature from the future work section in &lt;a href=&#34;https://github.com/blstream/sbt-search-maven-plugin&#34;&gt;readme&lt;/a&gt;,
 implement issue with feature proposal (if any) or fix some bugs. Pull requests are very welcome!&lt;/p&gt;
 
-&lt;h1 id=&#34;summary:1e22f624557bee0f0802330e0bc892fb&#34;&gt;Summary&lt;/h1&gt;
+&lt;h1 id=&#34;summary&#34;&gt;Summary&lt;/h1&gt;
 
 &lt;p&gt;This blog describes how to write a simple sbt plugin, test it and publish it.&lt;/p&gt;
 </description>
