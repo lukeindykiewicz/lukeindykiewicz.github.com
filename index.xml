@@ -6,8 +6,176 @@
     <description>Recent content on luekindykiewicz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Wed, 24 Aug 2016 18:30:50 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 01 Sep 2016 12:22:31 +0200</lastBuildDate>
     <atom:link href="https://lukeindykiewicz.github.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>free monads in business application</title>
+      <link>https://lukeindykiewicz.github.com/blog/free-monads-in-business-application/</link>
+      <pubDate>Thu, 01 Sep 2016 12:22:31 +0200</pubDate>
+      
+      <guid>https://lukeindykiewicz.github.com/blog/free-monads-in-business-application/</guid>
+      <description>
+
+&lt;h1 id=&#34;what&#34;&gt;What&lt;/h1&gt;
+
+&lt;p&gt;This post describes &lt;a href=&#34;https://github.com/lukeindykiewicz/letter-shop-api&#34;&gt;Letter Shop API&lt;/a&gt; implementation which uses Free Monads, exactly Free from &lt;a href=&#34;https://github.com/typelevel/cats&#34;&gt;Cats&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;tl-dr&#34;&gt;tl;dr&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/lukeindykiewicz/letter-shop-free-scala&#34;&gt;show me the code&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;why&#34;&gt;Why&lt;/h1&gt;
+
+&lt;p&gt;There are some nice materials about free monads on the net, but I always wanted to see how such concepts, applied to regular business applications, look like. How difficult or cumbersome it is to implement some business use case using a particular concept, e.g. free monads.&lt;/p&gt;
+
+&lt;p&gt;Letter Shop is my way to make business application implementation comparable. I have explained what it is in this &lt;a href=&#34;http://lukeindykiewicz.com/blog/letter-shop/&#34;&gt;post&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;how&#34;&gt;How&lt;/h1&gt;
+
+&lt;p&gt;Free monads separate algorithm definition from its implementation. We need a program - the code that describes steps of an algorithm, the compiler - the code that interprets/runs some other code for algorithm steps and data on which our algorithm works.&lt;/p&gt;
+
+&lt;h2 id=&#34;adt-as-your-internal-api&#34;&gt;ADT as your internal API&lt;/h2&gt;
+
+&lt;p&gt;We have to define all operations that are possible from business logic point of view as ADT.&lt;/p&gt;
+
+&lt;p&gt;ADT in Scala is described as a trait and case classes/objects implementing it. Each class/object describes one operation. Let&amp;rsquo;s look at &lt;code&gt;GetCart&lt;/code&gt; in &lt;a href=&#34;https://github.com/lukeindykiewicz/letter-shop-free-scala/blob/master/src/main/scala/domain.scala#L27&#34;&gt;StorageADT&lt;/a&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;case&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;GetCart&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cartId&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;extends&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;StorageADT&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;Cart&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;GetCart&lt;/code&gt; case class represents one operation (getting cart of course). It takes one parameter (&lt;code&gt;cartId&lt;/code&gt;) and returns cart, which is represented by &lt;code&gt;StotrageADT&lt;/code&gt; parameterized with &lt;code&gt;Cart&lt;/code&gt; type.&lt;/p&gt;
+
+&lt;p&gt;The whole ADT has a generic parameter which is specified in each class/object implementing it - this parameter is for return type of each operation.&lt;/p&gt;
+
+&lt;p&gt;Defining ADT in the first place looks like some huge amount of code that has to be written just to make free monads work, but in the end it occurs that it makes you think which operations are really needed in your code and it also defines your api. All this operations are your internal api.&lt;/p&gt;
+
+&lt;p&gt;You can of course have different ADTs for different parts of application, like: storage, users, validation, etc.&lt;/p&gt;
+
+&lt;h2 id=&#34;helpers-aka-boilerplate&#34;&gt;Helpers aka boilerplate&lt;/h2&gt;
+
+&lt;p&gt;After defining our plain old ADT we need to lift each class/object from ADT to &lt;code&gt;Free&lt;/code&gt;. In the easiest example it could be done simply by &lt;code&gt;Free.liftF&lt;/code&gt;, but this works when we have only one ADT in our application. I doubt it&amp;rsquo;s true for any business application, so if we don&amp;rsquo;t write small and simple dsl we need to complicate it a little bit.&lt;/p&gt;
+
+&lt;p&gt;There is a special method in &lt;code&gt;Free&lt;/code&gt; called &lt;code&gt;inject&lt;/code&gt;, which in fact calls &lt;code&gt;Free.liftF&lt;/code&gt;. It doesn&amp;rsquo;t lift our ADT, but it lifts value of type, which is injected as defined in a call to &lt;code&gt;Free.inject&lt;/code&gt;. Let&amp;rsquo;s see how does it look in &lt;a href=&#34;https://github.com/lukeindykiewicz/letter-shop-free-scala/blob/master/src/main/scala/free.scala&#34;&gt;code&lt;/a&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span&gt;&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;StorageConstructors&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;F&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;_&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]](&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;implicit&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;I&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;Inject&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;StorageADT&lt;/span&gt;, &lt;span class=&#34;kt&#34;&gt;F&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;])&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;getCart&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cartId&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;Free&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;F&lt;/span&gt;, &lt;span class=&#34;kt&#34;&gt;Cart&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;=&lt;/span&gt;
+      &lt;span class=&#34;nc&#34;&gt;Free&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;inject&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;StorageADT&lt;/span&gt;, &lt;span class=&#34;kt&#34;&gt;F&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;](&lt;/span&gt;&lt;span class=&#34;nc&#34;&gt;GetCart&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cartId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;))&lt;/span&gt;
+ &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;getCart&lt;/code&gt; is called a smart constructor. This is something that makes our case class &lt;code&gt;GetCart&lt;/code&gt; usable in context of Free when we have more than one ADT. Return type is simply &lt;code&gt;Free&lt;/code&gt; with &lt;code&gt;F&lt;/code&gt; and return type of given operation - &lt;code&gt;Cart&lt;/code&gt; in the above example.&lt;/p&gt;
+
+&lt;p&gt;So coming back to lifting, it &amp;ldquo;repacks&amp;rdquo; (&lt;code&gt;injects&lt;/code&gt;) from &lt;code&gt;StorageADT&lt;/code&gt; type into &lt;code&gt;F&lt;/code&gt; type and the result is lifted into &lt;code&gt;Free&lt;/code&gt;. This &lt;code&gt;F&lt;/code&gt; type in our case is &lt;code&gt;LetterShop&lt;/code&gt;, which is &lt;code&gt;Coproduct&lt;/code&gt; of our ADTs. I will come to &lt;code&gt;Coproduct&lt;/code&gt; in a while.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;StorageConstructors&lt;/code&gt; companion object defines implicit conversion from &lt;code&gt;Inject&lt;/code&gt; to our &lt;code&gt;StorageConstructors&lt;/code&gt;, but at the same time &lt;code&gt;Inject&lt;/code&gt; parameter is automatically created on demand (look into &lt;code&gt;Programs&lt;/code&gt; &lt;a href=&#34;https://github.com/lukeindykiewicz/letter-shop-free-scala/blob/master/src/main/scala/Programs.scala&#34;&gt;trait&lt;/a&gt;, each program needs implicit &lt;code&gt;StorageConstructors&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;We have also defined type alias&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;LetterShop&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Coproduct&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;StorageADT&lt;/span&gt;, &lt;span class=&#34;kt&#34;&gt;PriceADT&lt;/span&gt;, &lt;span class=&#34;kt&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;LetterShop&lt;/code&gt; is a &lt;code&gt;Coproduct&lt;/code&gt; of ADTs that we have used in application, that is &lt;code&gt;StorageADT&lt;/code&gt; and &lt;code&gt;PriceADT&lt;/code&gt;. &lt;code&gt;Coproduct&lt;/code&gt; is another type from &lt;code&gt;Cats&lt;/code&gt; which allows us to combine two ADTs and then use it with &lt;code&gt;Free&lt;/code&gt;. If we have more than two ADTs we need to combine one coproduct of two ADTs into another coproduct with third ADT and so on.&lt;/p&gt;
+
+&lt;p&gt;There is a lot of code that has to be written to satisfy the compiler here and it&amp;rsquo;s only preparation for writing programs and compilers - the core part of our application.&lt;/p&gt;
+
+&lt;h2 id=&#34;uc-s-as-programs&#34;&gt;UC&amp;rsquo;s as programs&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;Free&lt;/code&gt; is using terms like programs and compilers to talk about code that implements in abstract way the algorithm and code that really executes it. Use case (user story, name it as you wish) is a part of business logic in our code that gathers all the operations needed to achieve some goal. Typically it&amp;rsquo;s equivalent of one request from frontend to our backend code. Let&amp;rsquo;s see how does it look in &lt;a href=&#34;https://github.com/lukeindykiewicz/letter-shop-free-scala/blob/master/src/main/scala/Programs.scala&#34;&gt;code&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;getCartProgram&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cartId&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)(&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;implicit&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;S&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;StorageConstructors&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;LetterShop&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;])&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;Free&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;LetterShop&lt;/span&gt;, &lt;span class=&#34;kt&#34;&gt;Cart&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;k&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;S._&lt;/span&gt;
+  &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;cart&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;getCart&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cartId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+  &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;yield&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cart&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;getCartProgram&lt;/code&gt; takes all needed params in the first parameter list (&lt;code&gt;cartId&lt;/code&gt; in our case) and implicit &lt;code&gt;StorageConstructors[LetterShop]&lt;/code&gt;. Compiler sees the need for &lt;code&gt;StorageConstructors&lt;/code&gt; and finds implicit conversion in &lt;code&gt;StorageConstructors&lt;/code&gt; companion object, which in turn needs &lt;code&gt;Inject&lt;/code&gt; type. We don&amp;rsquo;t have such value in our code, but &lt;code&gt;cats.free.Inject.leftInjectInstance&lt;/code&gt; can be found. That&amp;rsquo;s why everything compiles and all the types are in place.&lt;/p&gt;
+
+&lt;p&gt;All steps of the program are coded using for comprehension. Return type for each program is also &lt;code&gt;Free&lt;/code&gt;. That makes it perfect for composition, because all our business logic returns &lt;code&gt;Free&lt;/code&gt;. Let&amp;rsquo;s look at &lt;code&gt;checkoutCartProgram&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;checkoutCartProgram&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cartId&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;promoCode&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;Option&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;])(&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;implicit&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;S&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;StorageConstructors&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;LetterShop&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;],&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;PromoConstructors&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;LetterShop&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;])&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;Free&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;LetterShop&lt;/span&gt;, &lt;span class=&#34;kt&#34;&gt;Checkout&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;k&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;S._&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;_&lt;/span&gt;
+  &lt;span class=&#34;k&#34;&gt;val&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;uuid&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;UUID&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;randomUUID&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;toString&lt;/span&gt;
+  &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;p&lt;/span&gt;    &lt;span class=&#34;k&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;checkCartProgram&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cartId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;promoCode&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;cart&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;getCart&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cartId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;_&lt;/span&gt;    &lt;span class=&#34;k&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;addToReceipts&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cartId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;ReceiptHistory&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;price&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;uuid&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cart&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;letters&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;))&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;_&lt;/span&gt;    &lt;span class=&#34;k&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;removeCart&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cartId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+  &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;yield&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Checkout&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;price&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;uuid&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This UC/program has more steps and as we can see first step just calls other program. That is followed by some other steps. Of course such composition is also possible without using &lt;code&gt;Free&lt;/code&gt;, but having one type container for every UC makes it a lot easier.&lt;/p&gt;
+
+&lt;p&gt;Program only generates steps of the algorithm. When it comes to the execution &amp;hellip; we need another code - compiler.&lt;/p&gt;
+
+&lt;h2 id=&#34;compilers&#34;&gt;Compilers&lt;/h2&gt;
+
+&lt;p&gt;We always wanted to write applications in which parts of them can be changed to some other parts without fixing the whole application. There are many ways to do this (interfaces, ports and adapters architecture, etc.). Free monads give us one more option. It&amp;rsquo;s nice because it&amp;rsquo;s really interchangeable without bothering that our business logic will fail (at least from business logic &amp;ldquo;algorithm&amp;rdquo; point of view).&lt;/p&gt;
+
+&lt;p&gt;So let&amp;rsquo;s write a compiler. In case of free monads from &lt;code&gt;Cats&lt;/code&gt; compiler is a &lt;code&gt;cats.arrow.NaturalTransformation&lt;/code&gt; (aliased as &lt;code&gt;~&amp;gt;&lt;/code&gt;) from ADT, that we have created, to some other type. It could be &lt;code&gt;Future&lt;/code&gt;, but the simplest one is &lt;code&gt;Id&lt;/code&gt;. Compiler has to be written for defined ADTs.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;storageCompiler&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;StorageADT&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;~&amp;gt;&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;Id&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;
+  &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nc&#34;&gt;StorageADT&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;~&amp;gt;&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Id&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;o&#34;&gt;...&lt;/span&gt; 
+  &lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;apply&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;](&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fa&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;StorageADT&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;])&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;Id&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fa&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;match&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;case&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;GetCart&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cartId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Cart&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;carts&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;getOrElse&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cartId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;))&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;case&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;AddToCart&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cartId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;letters&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;=&amp;gt;&lt;/span&gt;
+      &lt;span class=&#34;n&#34;&gt;carts&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cartId&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;letters&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+      &lt;span class=&#34;o&#34;&gt;()&lt;/span&gt;
+  &lt;span class=&#34;o&#34;&gt;...&lt;/span&gt;
+  &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The whole code is &lt;a href=&#34;https://github.com/lukeindykiewicz/letter-shop-free-scala/blob/master/src/main/scala/Compilers.scala&#34;&gt;here&lt;/a&gt;. This example is using &lt;code&gt;TrieMap&lt;/code&gt; and stores everything in memory just for simplicity. It could also go to database or connect to some service - that depends on compiler implementation.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;storageCompiler&lt;/code&gt; is a compiler for &lt;code&gt;StorageADT&lt;/code&gt; and it defines natural transformation from &lt;code&gt;StorageADT&lt;/code&gt; to &lt;code&gt;Id&lt;/code&gt;. To make it work we have to implement apply method which should know what to do with every element of our ADT. That&amp;rsquo;s why we use simple pattern matching. Of course compiler will tell us if we forget to implement one of case classes/objects as they are under sealed trait.&lt;/p&gt;
+
+&lt;p&gt;The other compiler from our example, &lt;code&gt;priceCompiler&lt;/code&gt;, delegates execution to &lt;code&gt;PromotionService&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The last step is to combine two compilers to be able to run all our programs - it&amp;rsquo;s simple:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;compiler&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;LetterShop&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;~&amp;gt;&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;Id&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;storageCompiler&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;or&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;priceCompiler&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;I use this compiler in &lt;a href=&#34;https://github.com/lukeindykiewicz/letter-shop-free-scala/blob/master/src/main/scala/main.scala#L36&#34;&gt;Routes&lt;/a&gt; to be able to run programs.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;code class=&#34;language-scala&#34; data-lang=&#34;scala&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;lazy&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;val&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;getCart&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;get&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;n&#34;&gt;path&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nc&#34;&gt;Segment&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cartId&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;=&amp;gt;&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;complete&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;getCartProgram&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cartId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;foldMap&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cmp&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;))&lt;/span&gt;
+  &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To run the program we need to call the program with needed params and &lt;code&gt;foldMap&lt;/code&gt; it with chosen compiler.&lt;/p&gt;
+
+&lt;h1 id=&#34;materials&#34;&gt;Materials&lt;/h1&gt;
+
+&lt;p&gt;The best material on practical usage of Free Monads in my opinion is &lt;a href=&#34;http://typelevel.org/cats/tut/freemonad.html&#34;&gt;Free&lt;/a&gt; description from Typelevel&lt;/p&gt;
+
+&lt;h1 id=&#34;summary&#34;&gt;Summary&lt;/h1&gt;
+
+&lt;p&gt;This blog post describes how to use &lt;code&gt;Free&lt;/code&gt; from &lt;code&gt;Cats&lt;/code&gt; to implement exemplary business application. Of course it&amp;rsquo;s not a silver bullet to take and use in every application, but it looks interesting. Especially when flexibility in choosing the way our code is executed is needed. It also gives our code some structure with one main type to which business logic is implemented. It&amp;rsquo;s useful in many ways not to have a code in which every UC returns different type (i.e. Option, Future, Either, etc.). For sure a lot of additional code has to be written to achieve this. The decision is yours.&lt;/p&gt;
+
+&lt;h1 id=&#34;comments&#34;&gt;Comments&lt;/h1&gt;
+
+&lt;p&gt;If you have some opinions about &lt;code&gt;Free&lt;/code&gt; and/or this text feel free to make PR, create issues and comment on twitter.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>letter shop</title>

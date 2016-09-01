@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Blog">
+
+<base href="https://lukeindykiewicz.github.com/">
+<title>
+
+
+     free monads in business application 
+
+</title>
+<link rel="canonical" href="https://lukeindykiewicz.github.com/blog/free-monads-in-business-application/">
+
+
+<script type="text/javascript">
+    var baseURL = 'https:\/\/lukeindykiewicz.github.com\/';
+    var host = baseURL.substring(0, baseURL.length - 1).replace(/\//g, '');
+    if ((host === window.location.host) && (window.location.protocol !== 'https:')) {
+        window.location.protocol = 'https:';
+    }
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="https://lukeindykiewicz.github.com/css/reset.css">
+<link rel="stylesheet" href="https://lukeindykiewicz.github.com/css/pygments.css">
+<link rel="stylesheet" href="https://lukeindykiewicz.github.com/css/main.css">
+
+
+    <link rel="stylesheet" href="https://lukeindykiewicz.github.com/css/override.css">
+
+
+
+
+
+<link rel="shortcut icon"
+
+    href="https://lukeindykiewicz.github.com/img/favico.ico"
+
+>
+
+
+
+
+</head>
+
+
+<body lang="en">
+
+<section class="header">
+    <div class="container">
+        <div class="content">
+            <a href="https://lukeindykiewicz.github.com/"><div class="name">Luke Indykiewicz</div></a>
+            <nav>
+                <ul>
+                    <a href="https://lukeindykiewicz.github.com/blog/"><li>Blog</li></a>
+                    <a href="https://lukeindykiewicz.github.com/about/"><li>About</li></a>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<section class="icons">
+    <div class="container">
+        <div class="content">
+
+        
+            <a href="//github.com/lukeindykiewicz" target="_blank">
+                <i class="icon ion-social-github"></i>
+            </a>
+        
+
+        
+            <a href="//twitter.com/lukeindykiewicz" target="_blank">
+                <i class="icon ion-social-twitter"></i>
+            </a>
+        
+
+        
+            <a href="//linkedin.com/in/lukaszindykiewicz" target="_blank">
+                <i class="icon ion-social-linkedin"></i>
+            </a>
+        
+
+        
+
+        
+
+        
+
+        </div>
+    </div>
+</section>
+
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
+
+    free monads in business application
+
+</div>
+
+                    <div class="initials"><a href="https://lukeindykiewicz.github.com/">li</a></div>
+                </div>
+                <div class="meta">
+                    <div class="date" title="Thu, 1 Sep 2016, 12:22:31 CEST">1 Sep 2016</div>
+                    <div class="reading-time"><div class="middot"></div>7 minutes read</div>
+                </div>
+            </div>
+            <div class="markdown">
+                
+
+<h1 id="what">What</h1>
+
+<p>This post describes <a href="https://github.com/lukeindykiewicz/letter-shop-api">Letter Shop API</a> implementation which uses Free Monads, exactly Free from <a href="https://github.com/typelevel/cats">Cats</a></p>
+
+<h1 id="tl-dr">tl;dr</h1>
+
+<p><a href="https://github.com/lukeindykiewicz/letter-shop-free-scala">show me the code</a></p>
+
+<h1 id="why">Why</h1>
+
+<p>There are some nice materials about free monads on the net, but I always wanted to see how such concepts, applied to regular business applications, look like. How difficult or cumbersome it is to implement some business use case using a particular concept, e.g. free monads.</p>
+
+<p>Letter Shop is my way to make business application implementation comparable. I have explained what it is in this <a href="http://lukeindykiewicz.com/blog/letter-shop/">post</a></p>
+
+<h1 id="how">How</h1>
+
+<p>Free monads separate algorithm definition from its implementation. We need a program - the code that describes steps of an algorithm, the compiler - the code that interprets/runs some other code for algorithm steps and data on which our algorithm works.</p>
+
+<h2 id="adt-as-your-internal-api">ADT as your internal API</h2>
+
+<p>We have to define all operations that are possible from business logic point of view as ADT.</p>
+
+<p>ADT in Scala is described as a trait and case classes/objects implementing it. Each class/object describes one operation. Let&rsquo;s look at <code>GetCart</code> in <a href="https://github.com/lukeindykiewicz/letter-shop-free-scala/blob/master/src/main/scala/domain.scala#L27">StorageADT</a>:</p>
+
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span></span><span class="k">case</span> <span class="k">class</span> <span class="nc">GetCart</span><span class="o">(</span><span class="n">cartId</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">StorageADT</span><span class="o">[</span><span class="kt">Cart</span><span class="o">]</span>
+</code></pre></div>
+
+
+<p><code>GetCart</code> case class represents one operation (getting cart of course). It takes one parameter (<code>cartId</code>) and returns cart, which is represented by <code>StotrageADT</code> parameterized with <code>Cart</code> type.</p>
+
+<p>The whole ADT has a generic parameter which is specified in each class/object implementing it - this parameter is for return type of each operation.</p>
+
+<p>Defining ADT in the first place looks like some huge amount of code that has to be written just to make free monads work, but in the end it occurs that it makes you think which operations are really needed in your code and it also defines your api. All this operations are your internal api.</p>
+
+<p>You can of course have different ADTs for different parts of application, like: storage, users, validation, etc.</p>
+
+<h2 id="helpers-aka-boilerplate">Helpers aka boilerplate</h2>
+
+<p>After defining our plain old ADT we need to lift each class/object from ADT to <code>Free</code>. In the easiest example it could be done simply by <code>Free.liftF</code>, but this works when we have only one ADT in our application. I doubt it&rsquo;s true for any business application, so if we don&rsquo;t write small and simple dsl we need to complicate it a little bit.</p>
+
+<p>There is a special method in <code>Free</code> called <code>inject</code>, which in fact calls <code>Free.liftF</code>. It doesn&rsquo;t lift our ADT, but it lifts value of type, which is injected as defined in a call to <code>Free.inject</code>. Let&rsquo;s see how does it look in <a href="https://github.com/lukeindykiewicz/letter-shop-free-scala/blob/master/src/main/scala/free.scala">code</a>:</p>
+
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span></span> <span class="k">class</span> <span class="nc">StorageConstructors</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]](</span><span class="k">implicit</span> <span class="n">I</span><span class="k">:</span> <span class="kt">Inject</span><span class="o">[</span><span class="kt">StorageADT</span>, <span class="kt">F</span><span class="o">])</span> <span class="o">{</span>
+    <span class="k">def</span> <span class="n">getCart</span><span class="o">(</span><span class="n">cartId</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">F</span>, <span class="kt">Cart</span><span class="o">]</span> <span class="k">=</span>
+      <span class="nc">Free</span><span class="o">.</span><span class="n">inject</span><span class="o">[</span><span class="kt">StorageADT</span>, <span class="kt">F</span><span class="o">](</span><span class="nc">GetCart</span><span class="o">(</span><span class="n">cartId</span><span class="o">))</span>
+ <span class="o">}</span>
+</code></pre></div>
+
+
+<p><code>getCart</code> is called a smart constructor. This is something that makes our case class <code>GetCart</code> usable in context of Free when we have more than one ADT. Return type is simply <code>Free</code> with <code>F</code> and return type of given operation - <code>Cart</code> in the above example.</p>
+
+<p>So coming back to lifting, it &ldquo;repacks&rdquo; (<code>injects</code>) from <code>StorageADT</code> type into <code>F</code> type and the result is lifted into <code>Free</code>. This <code>F</code> type in our case is <code>LetterShop</code>, which is <code>Coproduct</code> of our ADTs. I will come to <code>Coproduct</code> in a while.</p>
+
+<p><code>StorageConstructors</code> companion object defines implicit conversion from <code>Inject</code> to our <code>StorageConstructors</code>, but at the same time <code>Inject</code> parameter is automatically created on demand (look into <code>Programs</code> <a href="https://github.com/lukeindykiewicz/letter-shop-free-scala/blob/master/src/main/scala/Programs.scala">trait</a>, each program needs implicit <code>StorageConstructors</code>).</p>
+
+<p>We have also defined type alias</p>
+
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span></span><span class="k">type</span> <span class="kt">LetterShop</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Coproduct</span><span class="o">[</span><span class="kt">StorageADT</span>, <span class="kt">PriceADT</span>, <span class="kt">A</span><span class="o">]</span>
+</code></pre></div>
+
+
+<p><code>LetterShop</code> is a <code>Coproduct</code> of ADTs that we have used in application, that is <code>StorageADT</code> and <code>PriceADT</code>. <code>Coproduct</code> is another type from <code>Cats</code> which allows us to combine two ADTs and then use it with <code>Free</code>. If we have more than two ADTs we need to combine one coproduct of two ADTs into another coproduct with third ADT and so on.</p>
+
+<p>There is a lot of code that has to be written to satisfy the compiler here and it&rsquo;s only preparation for writing programs and compilers - the core part of our application.</p>
+
+<h2 id="uc-s-as-programs">UC&rsquo;s as programs</h2>
+
+<p><code>Free</code> is using terms like programs and compilers to talk about code that implements in abstract way the algorithm and code that really executes it. Use case (user story, name it as you wish) is a part of business logic in our code that gathers all the operations needed to achieve some goal. Typically it&rsquo;s equivalent of one request from frontend to our backend code. Let&rsquo;s see how does it look in <a href="https://github.com/lukeindykiewicz/letter-shop-free-scala/blob/master/src/main/scala/Programs.scala">code</a></p>
+
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span></span><span class="k">def</span> <span class="n">getCartProgram</span><span class="o">(</span><span class="n">cartId</span><span class="k">:</span> <span class="kt">String</span><span class="o">)(</span>
+    <span class="k">implicit</span> <span class="n">S</span><span class="k">:</span> <span class="kt">StorageConstructors</span><span class="o">[</span><span class="kt">LetterShop</span><span class="o">])</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">LetterShop</span>, <span class="kt">Cart</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">import</span> <span class="nn">S._</span>
+  <span class="k">for</span> <span class="o">{</span>
+    <span class="n">cart</span> <span class="k">&lt;-</span> <span class="n">getCart</span><span class="o">(</span><span class="n">cartId</span><span class="o">)</span>
+  <span class="o">}</span> <span class="k">yield</span> <span class="n">cart</span>
+<span class="o">}</span>
+</code></pre></div>
+
+
+<p><code>getCartProgram</code> takes all needed params in the first parameter list (<code>cartId</code> in our case) and implicit <code>StorageConstructors[LetterShop]</code>. Compiler sees the need for <code>StorageConstructors</code> and finds implicit conversion in <code>StorageConstructors</code> companion object, which in turn needs <code>Inject</code> type. We don&rsquo;t have such value in our code, but <code>cats.free.Inject.leftInjectInstance</code> can be found. That&rsquo;s why everything compiles and all the types are in place.</p>
+
+<p>All steps of the program are coded using for comprehension. Return type for each program is also <code>Free</code>. That makes it perfect for composition, because all our business logic returns <code>Free</code>. Let&rsquo;s look at <code>checkoutCartProgram</code>:</p>
+
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span></span><span class="k">def</span> <span class="n">checkoutCartProgram</span><span class="o">(</span><span class="n">cartId</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">promoCode</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">])(</span>
+    <span class="k">implicit</span> <span class="n">S</span><span class="k">:</span> <span class="kt">StorageConstructors</span><span class="o">[</span><span class="kt">LetterShop</span><span class="o">],</span>
+    <span class="n">P</span><span class="k">:</span> <span class="kt">PromoConstructors</span><span class="o">[</span><span class="kt">LetterShop</span><span class="o">])</span><span class="k">:</span> <span class="kt">Free</span><span class="o">[</span><span class="kt">LetterShop</span>, <span class="kt">Checkout</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">import</span> <span class="nn">S._</span><span class="o">,</span> <span class="n">P</span><span class="o">.</span><span class="k">_</span>
+  <span class="k">val</span> <span class="n">uuid</span> <span class="k">=</span> <span class="nc">UUID</span><span class="o">.</span><span class="n">randomUUID</span><span class="o">.</span><span class="n">toString</span>
+  <span class="k">for</span> <span class="o">{</span>
+    <span class="n">p</span>    <span class="k">&lt;-</span> <span class="n">checkCartProgram</span><span class="o">(</span><span class="n">cartId</span><span class="o">,</span> <span class="n">promoCode</span><span class="o">)</span>
+    <span class="n">cart</span> <span class="k">&lt;-</span> <span class="n">getCart</span><span class="o">(</span><span class="n">cartId</span><span class="o">)</span>
+    <span class="k">_</span>    <span class="k">&lt;-</span> <span class="n">addToReceipts</span><span class="o">(</span><span class="n">cartId</span><span class="o">,</span> <span class="nc">ReceiptHistory</span><span class="o">(</span><span class="n">p</span><span class="o">.</span><span class="n">price</span><span class="o">,</span> <span class="n">uuid</span><span class="o">,</span> <span class="n">cart</span><span class="o">.</span><span class="n">letters</span><span class="o">))</span>
+    <span class="k">_</span>    <span class="k">&lt;-</span> <span class="n">removeCart</span><span class="o">(</span><span class="n">cartId</span><span class="o">)</span>
+  <span class="o">}</span> <span class="k">yield</span> <span class="nc">Checkout</span><span class="o">(</span><span class="n">p</span><span class="o">.</span><span class="n">price</span><span class="o">,</span> <span class="n">uuid</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div>
+
+
+<p>This UC/program has more steps and as we can see first step just calls other program. That is followed by some other steps. Of course such composition is also possible without using <code>Free</code>, but having one type container for every UC makes it a lot easier.</p>
+
+<p>Program only generates steps of the algorithm. When it comes to the execution &hellip; we need another code - compiler.</p>
+
+<h2 id="compilers">Compilers</h2>
+
+<p>We always wanted to write applications in which parts of them can be changed to some other parts without fixing the whole application. There are many ways to do this (interfaces, ports and adapters architecture, etc.). Free monads give us one more option. It&rsquo;s nice because it&rsquo;s really interchangeable without bothering that our business logic will fail (at least from business logic &ldquo;algorithm&rdquo; point of view).</p>
+
+<p>So let&rsquo;s write a compiler. In case of free monads from <code>Cats</code> compiler is a <code>cats.arrow.NaturalTransformation</code> (aliased as <code>~&gt;</code>) from ADT, that we have created, to some other type. It could be <code>Future</code>, but the simplest one is <code>Id</code>. Compiler has to be written for defined ADTs.</p>
+
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span></span><span class="k">def</span> <span class="n">storageCompiler</span><span class="k">:</span> <span class="kt">StorageADT</span> <span class="kt">~&gt;</span> <span class="kt">Id</span> <span class="o">=</span>
+  <span class="k">new</span> <span class="o">(</span><span class="nc">StorageADT</span> <span class="o">~&gt;</span> <span class="nc">Id</span><span class="o">)</span> <span class="o">{</span>
+  <span class="o">...</span> 
+  <span class="k">def</span> <span class="n">apply</span><span class="o">[</span><span class="kt">A</span><span class="o">](</span><span class="n">fa</span><span class="k">:</span> <span class="kt">StorageADT</span><span class="o">[</span><span class="kt">A</span><span class="o">])</span><span class="k">:</span> <span class="kt">Id</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="k">=</span> <span class="n">fa</span> <span class="k">match</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">GetCart</span><span class="o">(</span><span class="n">cartId</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">Cart</span><span class="o">(</span><span class="n">carts</span><span class="o">.</span><span class="n">getOrElse</span><span class="o">(</span><span class="n">cartId</span><span class="o">,</span> <span class="s">&quot;&quot;</span><span class="o">))</span>
+    <span class="k">case</span> <span class="nc">AddToCart</span><span class="o">(</span><span class="n">cartId</span><span class="o">,</span> <span class="n">letters</span><span class="o">)</span> <span class="k">=&gt;</span>
+      <span class="n">carts</span> <span class="o">+=</span> <span class="o">(</span><span class="n">cartId</span> <span class="o">-&gt;</span> <span class="n">letters</span><span class="o">)</span>
+      <span class="o">()</span>
+  <span class="o">...</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+
+
+<p>The whole code is <a href="https://github.com/lukeindykiewicz/letter-shop-free-scala/blob/master/src/main/scala/Compilers.scala">here</a>. This example is using <code>TrieMap</code> and stores everything in memory just for simplicity. It could also go to database or connect to some service - that depends on compiler implementation.</p>
+
+<p><code>storageCompiler</code> is a compiler for <code>StorageADT</code> and it defines natural transformation from <code>StorageADT</code> to <code>Id</code>. To make it work we have to implement apply method which should know what to do with every element of our ADT. That&rsquo;s why we use simple pattern matching. Of course compiler will tell us if we forget to implement one of case classes/objects as they are under sealed trait.</p>
+
+<p>The other compiler from our example, <code>priceCompiler</code>, delegates execution to <code>PromotionService</code>.</p>
+
+<p>The last step is to combine two compilers to be able to run all our programs - it&rsquo;s simple:</p>
+
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span></span><span class="k">def</span> <span class="n">compiler</span><span class="k">:</span> <span class="kt">LetterShop</span> <span class="kt">~&gt;</span> <span class="kt">Id</span> <span class="o">=</span> <span class="n">storageCompiler</span> <span class="n">or</span> <span class="n">priceCompiler</span>
+</code></pre></div>
+
+
+<p>I use this compiler in <a href="https://github.com/lukeindykiewicz/letter-shop-free-scala/blob/master/src/main/scala/main.scala#L36">Routes</a> to be able to run programs.</p>
+
+<div class="highlight"><pre><code class="language-scala" data-lang="scala"><span></span><span class="k">lazy</span> <span class="k">val</span> <span class="n">getCart</span> <span class="k">=</span> <span class="n">get</span> <span class="o">{</span>
+  <span class="n">path</span><span class="o">(</span><span class="nc">Segment</span><span class="o">)</span> <span class="o">{</span> <span class="n">cartId</span> <span class="k">=&gt;</span>
+    <span class="n">complete</span><span class="o">(</span><span class="n">getCartProgram</span><span class="o">(</span><span class="n">cartId</span><span class="o">).</span><span class="n">foldMap</span><span class="o">(</span><span class="n">cmp</span><span class="o">))</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+
+
+<p>To run the program we need to call the program with needed params and <code>foldMap</code> it with chosen compiler.</p>
+
+<h1 id="materials">Materials</h1>
+
+<p>The best material on practical usage of Free Monads in my opinion is <a href="http://typelevel.org/cats/tut/freemonad.html">Free</a> description from Typelevel</p>
+
+<h1 id="summary">Summary</h1>
+
+<p>This blog post describes how to use <code>Free</code> from <code>Cats</code> to implement exemplary business application. Of course it&rsquo;s not a silver bullet to take and use in every application, but it looks interesting. Especially when flexibility in choosing the way our code is executed is needed. It also gives our code some structure with one main type to which business logic is implemented. It&rsquo;s useful in many ways not to have a code in which every UC returns different type (i.e. Option, Future, Either, etc.). For sure a lot of additional code has to be written to achieve this. The decision is yours.</p>
+
+<h1 id="comments">Comments</h1>
+
+<p>If you have some opinions about <code>Free</code> and/or this text feel free to make PR, create issues and comment on twitter.</p>
+
+                <br>
+                <p><a href="https://lukeindykiewicz.github.com/blog/">Back to posts</a></p>
+            </div>
+            <br>
+            <div class="disqus">
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+    var pageTracker = _gat._getTracker("UA-73272302-1");
+    pageTracker._trackPageview();
+} catch(err) {}
+</script>
+
+
+
+</body>
+</html>
+
