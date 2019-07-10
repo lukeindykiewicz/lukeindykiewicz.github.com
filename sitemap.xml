@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  
-  <url>
-    <loc>https://lukeindykiewicz.github.com/</loc>
-    <lastmod>2016-09-01T12:22:31+02:00</lastmod>
-  </url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
     <loc>https://lukeindykiewicz.github.com/blog/free-monads-in-business-application/</loc>
@@ -24,6 +20,28 @@
   <url>
     <loc>https://lukeindykiewicz.github.com/about/</loc>
     <lastmod>2016-01-24T19:33:17+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://lukeindykiewicz.github.com/blog/</loc>
+    <lastmod>2016-09-01T12:22:31+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://lukeindykiewicz.github.com/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://lukeindykiewicz.github.com/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://lukeindykiewicz.github.com/</loc>
+    <lastmod>2016-09-01T12:22:31+02:00</lastmod>
+    <priority>0</priority>
   </url>
   
 </urlset>
