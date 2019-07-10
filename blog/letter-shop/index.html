@@ -3,33 +3,31 @@
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="HandheldFriendly" content="True">
-    <meta name="MobileOptimized" content="320">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="referrer" content="no-referrer">
-    <meta name="author" content="Luke Indykiewicz">
-    <meta name="description"
-        content="What This post describes a made up application - Letter Shop, why I created it and how it was done.
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<meta name="author" content="Luke Indykiewicz">
+<meta name="description" content="What This post describes a made up application - Letter Shop, why I created it and how it was done.
 tl;dr  TCK code API code  Why Letter Shop is an attempt to make comparison of concepts possible, of course in a very practical way. I wanted to have some api/tests/problem that I can implement with different approaches (like using monads, using event sourcing, etc.). Each approach is best in a particular situation and simple examples, &ldquo;hello worlds&rdquo; show exactly those cases.">
 
-    <meta property="og:title" content="letter shop" />
-    <meta property="og:description"
-        content="What This post describes a made up application - Letter Shop, why I created it and how it was done.
+<meta property="og:title" content="letter shop" />
+<meta property="og:description" content="What This post describes a made up application - Letter Shop, why I created it and how it was done.
 tl;dr  TCK code API code  Why Letter Shop is an attempt to make comparison of concepts possible, of course in a very practical way. I wanted to have some api/tests/problem that I can implement with different approaches (like using monads, using event sourcing, etc.). Each approach is best in a particular situation and simple examples, &ldquo;hello worlds&rdquo; show exactly those cases." />
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://lukeindykiewicz.github.com/blog/letter-shop/" />
-    <meta property="article:published_time" content="2016-08-24T18:30:50&#43;02:00" />
-    <meta property="article:modified_time" content="2016-08-24T18:30:50&#43;02:00" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lukeindykiewicz.github.io/blog/letter-shop/" /><meta property="article:published_time" content="2016-08-24T18:30:50&#43;02:00"/>
+<meta property="article:modified_time" content="2016-08-24T18:30:50&#43;02:00"/>
 
 
     <title>
-
-
-        letter shop
-
+        
+        
+         letter shop 
+        
     </title>
-    <link rel="canonical" href="https://lukeindykiewicz.github.com/blog/letter-shop/">
+    <link rel="canonical" href="https://lukeindykiewicz.github.io/blog/letter-shop/">
+    
 
 
 
@@ -39,26 +37,20 @@ tl;dr  TCK code API code  Why Letter Shop is an attempt to make comparison of co
 
 
 
-
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:500">
-
-
-
-
-    <link rel="stylesheet"
-        href="https://lukeindykiewicz.github.com/css/reset.css?t=2019-07-10%2022%3a07%3a26.43269%20%2b0200%20CEST%20m%3d%2b0.046696425">
-    <link rel="stylesheet"
-        href="https://lukeindykiewicz.github.com/css/pygments.css?t=2019-07-10%2022%3a07%3a26.43269%20%2b0200%20CEST%20m%3d%2b0.046696425">
-    <link rel="stylesheet"
-        href="https://lukeindykiewicz.github.com/css/main.css?t=2019-07-10%2022%3a07%3a26.43269%20%2b0200%20CEST%20m%3d%2b0.046696425">
+<link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:500">
 
 
 
 
+<link rel="stylesheet" href="https://lukeindykiewicz.github.io/css/reset.css?t=2019-07-10%2023%3a09%3a27.588495%20%2b0200%20CEST%20m%3d%2b0.043453142">
+<link rel="stylesheet" href="https://lukeindykiewicz.github.io/css/pygments.css?t=2019-07-10%2023%3a09%3a27.588495%20%2b0200%20CEST%20m%3d%2b0.043453142">
+<link rel="stylesheet" href="https://lukeindykiewicz.github.io/css/main.css?t=2019-07-10%2023%3a09%3a27.588495%20%2b0200%20CEST%20m%3d%2b0.043453142">
 
 
-    <link rel="shortcut icon" href="https://lukeindykiewicz.github.com/img/favico.ico">
+
+
+<link rel="shortcut icon"  href="https://lukeindykiewicz.github.io/img/favico.ico" >
 
 
 
@@ -67,237 +59,210 @@ tl;dr  TCK code API code  Why Letter Shop is an attempt to make comparison of co
 
 
 
-
+    
 </head>
 
 
 <body lang="en">
 
-    <section class="header">
-        <div class="container">
-            <div class="content">
+        <section class="header">
+                <div class="container">
+                        <div class="content">
+                                
+                                <a href="https://lukeindykiewicz.github.io/">
+                                        <div class="name">Luke Indykiewicz</div>
+                                </a>
+                                
+                                <nav>
+                                        <ul>
+                                                
+                                                <li class="nav-blog"><a
+                                                                href="https://lukeindykiewicz.github.io/blog/"><span>Blog</span></a>
+                                                </li>
+                                                
+                                                <li class="nav-about"><a
+                                                                href="https://lukeindykiewicz.github.io/about/"><span>About</span></a>
+                                                </li>
+                                                
+                                        </ul>
+                                </nav>
+                        </div>
+                </div>
+        </section>
 
-                <a href="https://lukeindykiewicz.github.com/">
-                    <div class="name">Luke Indykiewicz</div>
-                </a>
+        <section class="icons">
+                <div class="container">
+                        <div class="content">
+                                
+                                <a href="//github.com/lukeindykiewicz" target="_blank" rel="noopener"><img class="icon"
+                                                src="https://lukeindykiewicz.github.io/img/github.svg" alt="github" /></a>
+                                
 
-                <nav>
-                    <ul>
+                                
 
-                        <li class="nav-blog"><a href="https://lukeindykiewicz.github.com/blog/"><span>Blog</span></a>
-                        </li>
+                                
+                                <a href="//twitter.com/lukeindykiewicz" target="_blank" rel="noopener"><img class="icon"
+                                                src="https://lukeindykiewicz.github.io/img/twitter.svg" alt="twitter" /></a>
+                                
 
-                        <li class="nav-about"><a href="https://lukeindykiewicz.github.com/about/"><span>About</span></a>
-                        </li>
+                                
 
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </section>
+                                
 
-    <section class="icons">
-        <div class="container">
-            <div class="content">
+                                
 
-                <a href="//github.com/lukeindykiewicz" target="_blank" rel="noopener"><img class="icon"
-                        src="https://lukeindykiewicz.github.com/img/github.svg" alt="github" /></a>
+                                
+                                <a href="//linkedin.com/in/lukaszindykiewicz" target="_blank" rel="noopener"><img class="icon"
+                                                src="https://lukeindykiewicz.github.io/img/linkedin.svg" alt="linkedin" /></a>
+                                
 
+                                
 
+                                
 
+                                
 
+                                
 
-                <a href="//twitter.com/lukeindykiewicz" target="_blank" rel="noopener"><img class="icon"
-                        src="https://lukeindykiewicz.github.com/img/twitter.svg" alt="twitter" /></a>
+                                
 
+                                
 
+                                
 
-
-
-
-
-
-
-                <a href="//linkedin.com/in/lukaszindykiewicz" target="_blank" rel="noopener"><img class="icon"
-                        src="https://lukeindykiewicz.github.com/img/linkedin.svg" alt="linkedin" /></a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            </div>
-        </div>
-    </section>
-
-
-    <section class="main post non-narrow zero-top-spacing">
-        <div class="container">
-            <div class="content">
-                <div class="front-matter">
-                    <div class="title-container">
-                        <div class="page-heading">
-
-                            letter shop
+                                
 
                         </div>
-
-                        <div class="initials"><a href="https://lukeindykiewicz.github.com/"></a></div>
-                    </div>
-                    <div class="meta">
-
-                        <div class="date" title='Wed, 24 Aug 2016, 18:30:50 CEST'>24 Aug 2016</div>
-
-
-                        <div class="reading-time">
-                            <div class="middot"></div>3 minutes read
-                        </div>
-
-                    </div>
                 </div>
-                <div class="markdown">
+        </section>
 
 
-                    <h1 id="what">What</h1>
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
 
-                    <p>This post describes a made up application - Letter Shop, why I created it and how it was done.
-                    </p>
+    letter shop
 
-                    <h1 id="tl-dr">tl;dr</h1>
+</div>
 
-                    <ul>
-                        <li><a href="https://github.com/lukeindykiewicz/letter-sh">TCK code</a></li>
-                        <li><a href="https://github.com/lukeindykiewicz/letter-shop-api">API code</a></li>
-                    </ul>
-
-                    <h1 id="why">Why</h1>
-
-                    <p>Letter Shop is an attempt to make comparison of concepts possible, of course in a very practical
-                        way. I wanted to have some api/tests/problem that I can implement with different approaches
-                        (like using monads, using event sourcing, etc.). Each approach is best in a particular situation
-                        and simple examples, &ldquo;hello worlds&rdquo; show exactly those cases. Then it comes to a
-                        real world example and sometimes it&rsquo;s not so sweet. There is <a
-                            href="http://todomvc.com/">TodoMVC</a> and <a
-                            href="http://www.todobackend.com/">Todo-Backend</a>, but I wanted to have more control over
-                        the problem, to make it evolve according to the concepts I&rsquo;m exploring.
-                        There is also another reason, I want to have this api/tck as my kata for further exploring of
-                        programming concepts and languages.</p>
-
-                    <p>There are two main parts of Letter Shop:</p>
-
-                    <ul>
-                        <li>API - this is yaml (swagger) description of endpoints available in the Letter Shop</li>
-                        <li>TCK - tests for all main features, green means a proper implementation of an API</li>
-                    </ul>
-
-                    <h1 id="how">How</h1>
-
-                    <h2 id="idea">Idea</h2>
-
-                    <p>I wanted to model something that is a little bit more complicated than todo, but also is easy
-                        enough to not loose interest in building it and be able to quickly explain what it does. The
-                        main goal is to train/check new programming ideas, not explore business domain. So I took a shop
-                        case, as it is a well know situation for everyone. We have cart, things we want to buy and some
-                        price. I didn&rsquo;t want to implement a lot of different products in the shop, so I decided
-                        that the shop sell letters, like: a,b,c. Sounds stupid, but for this purpose suits very good.
-                    </p>
-
-                    <h2 id="api">API</h2>
-
-                    <p>Api (<a href="http://lukeindykiewicz.com/letter-shop-api/#/default">swagger ui</a>) contains just
-                        few endpoints - basic features of Letter Shop. We can:</p>
-
-                    <ul>
-                        <li>add letters to the cart</li>
-                        <li>replace existing cart with new letters (also clean cart)</li>
-                        <li>get cart info</li>
-                        <li>check cart (just checks the price of current cart)</li>
-                        <li>checkout cart (price, receipt id and cleans cart)</li>
-                        <li>set price for given letter (default price is 10)</li>
-                        <li>get all receipts from the system</li>
-                    </ul>
-
-                    <p>Yes, everything is public, no user/admin login. It has to be simple.</p>
-
-                    <p>This is pure CRU (create, read, update) stuff, so I decided to add some price logic. So, as in
-                        every shop, there are promotions:</p>
-
-                    <ul>
-                        <li>Three for two (only for letter &lsquo;a&rsquo; and &lsquo;X&rsquo;) - when you buy three
-                            letters you pay only for two</li>
-                        <li>Promo code to get 10 percent discount</li>
-                    </ul>
-
-                    <p>Read <a
-                            href="https://github.com/lukeindykiewicz/letter-shop-tck/blob/master/src/test/scala/lettershop/CheckCartPriceTest.scala">CheckCartPriceTest</a>
-                        to check promotion rules exactly.</p>
-
-                    <h2 id="tck">TCK</h2>
-
-                    <p><a
-                            href="https://github.com/lukeindykiewicz/letter-shop-tck/tree/master/src/test/scala/lettershop">Tests</a>
-                        are written in Scala and specs2. They describe high level functionalities for Letter Shop.</p>
-
-                    <h1 id="what-is-missing">What is missing</h1>
-
-                    <p>I decided to put Letter Shop online, although I don&rsquo;t know what should be there to make it
-                        1.0 ready. As I mentioned earlier this will probably evolve. On the other hand I think it is
-                        enough to start implementing Letter Shop. Things that are planned:</p>
-
-                    <ul>
-                        <li>add validation, as this is always a case in business applications</li>
-                        <li>think of a way to run tests in some CI (tck is a separate project).</li>
-                        <li>write free monads implementation</li>
-                    </ul>
-
-                    <h1 id="implementations">Implementations</h1>
-
-                    <p>Very simple implementation is already there, just to test the tests. <a
-                            href="https://github.com/lukeindykiewicz/letter-shop-classic-scala">Check it</a> if you
-                        want.</p>
-
-                    <h1 id="summary">Summary</h1>
-
-                    <p>This is a first blog about Letter Shop, the definition that is going to be implemented and
-                        descibed in future blog posts.</p>
-
-                    <br>
-
-                    <p class="back-to-posts"><a href="https://lukeindykiewicz.github.com/blog">Back to posts</a></p>
+                    <div class="initials"><a href="https://lukeindykiewicz.github.io/"></a></div>
                 </div>
+                <div class="meta">
+                    
+                    <div class="date" title='Wed, 24 Aug 2016, 18:30:50 CEST'>24 Aug 2016</div>
+                    
+                    
+		    <div class="reading-time"><div class="middot"></div>3 minutes read</div>
+                    
+                </div>
+            </div>
+            <div class="markdown">
+                
+
+<h1 id="what">What</h1>
+
+<p>This post describes a made up application - Letter Shop, why I created it and how it was done.</p>
+
+<h1 id="tl-dr">tl;dr</h1>
+
+<ul>
+<li><a href="https://github.com/lukeindykiewicz/letter-sh">TCK code</a></li>
+<li><a href="https://github.com/lukeindykiewicz/letter-shop-api">API code</a></li>
+</ul>
+
+<h1 id="why">Why</h1>
+
+<p>Letter Shop is an attempt to make comparison of concepts possible, of course in a very practical way. I wanted to have some api/tests/problem that I can implement with different approaches (like using monads, using event sourcing, etc.). Each approach is best in a particular situation and simple examples, &ldquo;hello worlds&rdquo; show exactly those cases. Then it comes to a real world example and sometimes it&rsquo;s not so sweet. There is <a href="http://todomvc.com/">TodoMVC</a> and <a href="http://www.todobackend.com/">Todo-Backend</a>, but I wanted to have more control over the problem, to make it evolve according to the concepts I&rsquo;m exploring.
+There is also another reason, I want to have this api/tck as my kata for further exploring of programming concepts and languages.</p>
+
+<p>There are two main parts of Letter Shop:</p>
+
+<ul>
+<li>API - this is yaml (swagger) description of endpoints available in the Letter Shop</li>
+<li>TCK - tests for all main features, green means a proper implementation of an API</li>
+</ul>
+
+<h1 id="how">How</h1>
+
+<h2 id="idea">Idea</h2>
+
+<p>I wanted to model something that is a little bit more complicated than todo, but also is easy enough to not loose interest in building it and be able to quickly explain what it does. The main goal is to train/check new programming ideas, not explore business domain. So I took a shop case, as it is a well know situation for everyone. We have cart, things we want to buy and some price. I didn&rsquo;t want to implement a lot of different products in the shop, so I decided that the shop sell letters, like: a,b,c. Sounds stupid, but for this purpose suits very good.</p>
+
+<h2 id="api">API</h2>
+
+<p>Api (<a href="http://lukeindykiewicz.com/letter-shop-api/#/default">swagger ui</a>) contains just few endpoints - basic features of Letter Shop. We can:</p>
+
+<ul>
+<li>add letters to the cart</li>
+<li>replace existing cart with new letters (also clean cart)</li>
+<li>get cart info</li>
+<li>check cart (just checks the price of current cart)</li>
+<li>checkout cart (price, receipt id and cleans cart)</li>
+<li>set price for given letter (default price is 10)</li>
+<li>get all receipts from the system</li>
+</ul>
+
+<p>Yes, everything is public, no user/admin login. It has to be simple.</p>
+
+<p>This is pure CRU (create, read, update) stuff, so I decided to add some price logic. So, as in every shop, there are promotions:</p>
+
+<ul>
+<li>Three for two (only for letter &lsquo;a&rsquo; and &lsquo;X&rsquo;) - when you buy three letters you pay only for two</li>
+<li>Promo code to get 10 percent discount</li>
+</ul>
+
+<p>Read <a href="https://github.com/lukeindykiewicz/letter-shop-tck/blob/master/src/test/scala/lettershop/CheckCartPriceTest.scala">CheckCartPriceTest</a> to check promotion rules exactly.</p>
+
+<h2 id="tck">TCK</h2>
+
+<p><a href="https://github.com/lukeindykiewicz/letter-shop-tck/tree/master/src/test/scala/lettershop">Tests</a> are written in Scala and specs2. They describe high level functionalities for Letter Shop.</p>
+
+<h1 id="what-is-missing">What is missing</h1>
+
+<p>I decided to put Letter Shop online, although I don&rsquo;t know what should be there to make it 1.0 ready. As I mentioned earlier this will probably evolve. On the other hand I think it is enough to start implementing Letter Shop. Things that are planned:</p>
+
+<ul>
+<li>add validation, as this is always a case in business applications</li>
+<li>think of a way to run tests in some CI (tck is a separate project).</li>
+<li>write free monads implementation</li>
+</ul>
+
+<h1 id="implementations">Implementations</h1>
+
+<p>Very simple implementation is already there, just to test the tests. <a href="https://github.com/lukeindykiewicz/letter-shop-classic-scala">Check it</a> if you want.</p>
+
+<h1 id="summary">Summary</h1>
+
+<p>This is a first blog about Letter Shop, the definition that is going to be implemented and descibed in future blog posts.</p>
+
                 <br>
-                <div class="disqus">
-
-                </div>
-
+                
+                <p class="back-to-posts"><a href="https://lukeindykiewicz.github.io/blog">Back to posts</a></p>
             </div>
+            <br>
+            <div class="disqus">
+                
+            </div>
+            
         </div>
-    </section>
+    </div>
+</section>
 
 
 
-    <script type="application/javascript">
-        var doNotTrack = false;
-        if (!doNotTrack) {
-            window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) }; ga.l = +new Date;
-            ga('create', 'UA-73272302-1', 'auto');
-
-            ga('send', 'pageview');
-        }
-    </script>
-    <script async src='https://www.google-analytics.com/analytics.js'></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-73272302-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 
 
 
@@ -306,5 +271,5 @@ tl;dr  TCK code API code  Why Letter Shop is an attempt to make comparison of co
 
 
 </body>
-
 </html>
+

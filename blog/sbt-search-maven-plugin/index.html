@@ -20,7 +20,7 @@ tl;dr show me the code
 Why Most development tasks can be done without leaving your favorite editor/ide nor console. Writing Scala code is no different: sbt gives you a lot of power to run code and tests, to package and publish application.
 There is one small thing though, forcing you to leave that environment and go to a browser - to find the exact name of dependency for your project." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://lukeindykiewicz.github.com/blog/sbt-search-maven-plugin/" /><meta property="article:published_time" content="2016-01-26T18:27:31&#43;01:00"/>
+<meta property="og:url" content="https://lukeindykiewicz.github.io/blog/sbt-search-maven-plugin/" /><meta property="article:published_time" content="2016-01-26T18:27:31&#43;01:00"/>
 <meta property="article:modified_time" content="2016-01-26T18:27:31&#43;01:00"/>
 
 
@@ -30,7 +30,7 @@ There is one small thing though, forcing you to leave that environment and go to
          sbt search maven plugin 
         
     </title>
-    <link rel="canonical" href="https://lukeindykiewicz.github.com/blog/sbt-search-maven-plugin/">
+    <link rel="canonical" href="https://lukeindykiewicz.github.io/blog/sbt-search-maven-plugin/">
     
 
 
@@ -41,24 +41,20 @@ There is one small thing though, forcing you to leave that environment and go to
 
 
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:500">
-
-
-
-    
-    <link rel="stylesheet" href="https://lukeindykiewicz.github.com/css/reset.css?t=2019-07-10%2022%3a07%3a26.479587%20%2b0200%20CEST%20m%3d%2b0.093593853">
-    <link rel="stylesheet" href="https://lukeindykiewicz.github.com/css/pygments.css?t=2019-07-10%2022%3a07%3a26.479587%20%2b0200%20CEST%20m%3d%2b0.093593853">
-    <link rel="stylesheet" href="https://lukeindykiewicz.github.com/css/main.css?t=2019-07-10%2022%3a07%3a26.479587%20%2b0200%20CEST%20m%3d%2b0.093593853">
-    
+<link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:500">
 
 
 
 
-<link rel="shortcut icon"
+<link rel="stylesheet" href="https://lukeindykiewicz.github.io/css/reset.css?t=2019-07-10%2023%3a09%3a27.629975%20%2b0200%20CEST%20m%3d%2b0.084934557">
+<link rel="stylesheet" href="https://lukeindykiewicz.github.io/css/pygments.css?t=2019-07-10%2023%3a09%3a27.629975%20%2b0200%20CEST%20m%3d%2b0.084934557">
+<link rel="stylesheet" href="https://lukeindykiewicz.github.io/css/main.css?t=2019-07-10%2023%3a09%3a27.629975%20%2b0200%20CEST%20m%3d%2b0.084934557">
 
-    href="https://lukeindykiewicz.github.com/img/favico.ico"
 
->
+
+
+<link rel="shortcut icon"  href="https://lukeindykiewicz.github.io/img/favico.ico" >
 
 
 
@@ -77,7 +73,7 @@ There is one small thing though, forcing you to leave that environment and go to
                 <div class="container">
                         <div class="content">
                                 
-                                <a href="https://lukeindykiewicz.github.com/">
+                                <a href="https://lukeindykiewicz.github.io/">
                                         <div class="name">Luke Indykiewicz</div>
                                 </a>
                                 
@@ -85,11 +81,11 @@ There is one small thing though, forcing you to leave that environment and go to
                                         <ul>
                                                 
                                                 <li class="nav-blog"><a
-                                                                href="https://lukeindykiewicz.github.com/blog/"><span>Blog</span></a>
+                                                                href="https://lukeindykiewicz.github.io/blog/"><span>Blog</span></a>
                                                 </li>
                                                 
                                                 <li class="nav-about"><a
-                                                                href="https://lukeindykiewicz.github.com/about/"><span>About</span></a>
+                                                                href="https://lukeindykiewicz.github.io/about/"><span>About</span></a>
                                                 </li>
                                                 
                                         </ul>
@@ -103,14 +99,14 @@ There is one small thing though, forcing you to leave that environment and go to
                         <div class="content">
                                 
                                 <a href="//github.com/lukeindykiewicz" target="_blank" rel="noopener"><img class="icon"
-                                                src="https://lukeindykiewicz.github.com/img/github.svg" alt="github" /></a>
+                                                src="https://lukeindykiewicz.github.io/img/github.svg" alt="github" /></a>
                                 
 
                                 
 
                                 
                                 <a href="//twitter.com/lukeindykiewicz" target="_blank" rel="noopener"><img class="icon"
-                                                src="https://lukeindykiewicz.github.com/img/twitter.svg" alt="twitter" /></a>
+                                                src="https://lukeindykiewicz.github.io/img/twitter.svg" alt="twitter" /></a>
                                 
 
                                 
@@ -121,7 +117,7 @@ There is one small thing though, forcing you to leave that environment and go to
 
                                 
                                 <a href="//linkedin.com/in/lukaszindykiewicz" target="_blank" rel="noopener"><img class="icon"
-                                                src="https://lukeindykiewicz.github.com/img/linkedin.svg" alt="linkedin" /></a>
+                                                src="https://lukeindykiewicz.github.io/img/linkedin.svg" alt="linkedin" /></a>
                                 
 
                                 
@@ -156,7 +152,7 @@ There is one small thing though, forcing you to leave that environment and go to
 
 </div>
 
-                    <div class="initials"><a href="https://lukeindykiewicz.github.com/"></a></div>
+                    <div class="initials"><a href="https://lukeindykiewicz.github.io/"></a></div>
                 </div>
                 <div class="meta">
                     
@@ -293,7 +289,7 @@ implement issue with feature proposal (if any) or fix some bugs. Pull requests a
 
                 <br>
                 
-                <p class="back-to-posts"><a href="https://lukeindykiewicz.github.com/blog">Back to posts</a></p>
+                <p class="back-to-posts"><a href="https://lukeindykiewicz.github.io/blog">Back to posts</a></p>
             </div>
             <br>
             <div class="disqus">
