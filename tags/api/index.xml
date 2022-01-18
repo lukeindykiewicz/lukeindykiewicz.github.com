@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>api on luke indykiewicz</title>
+    <link>https://lukeindykiewicz.github.io/tags/api/</link>
+    <description>Recent content in api on luke indykiewicz</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 24 Aug 2016 18:30:50 +0200</lastBuildDate><atom:link href="https://lukeindykiewicz.github.io/tags/api/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>letter shop</title>
+      <link>https://lukeindykiewicz.github.io/letter-shop/</link>
+      <pubDate>Wed, 24 Aug 2016 18:30:50 +0200</pubDate>
+      
+      <guid>https://lukeindykiewicz.github.io/letter-shop/</guid>
+      <description>What    This post describes a made up application - Letter Shop, why I created it and how it was done.
+tl;dr     TCK code API code  Why    Letter Shop is an attempt to make comparison of concepts possible, of course in a very practical way. I wanted to have some api/tests/problem that I can implement with different approaches (like using monads, using event sourcing, etc.</description>
+    </item>
+    
+  </channel>
+</rss>

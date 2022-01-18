@@ -1,14 +1,74 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on lukeindykiewicz</title>
+    <title>Tags on luke indykiewicz</title>
     <link>https://lukeindykiewicz.github.io/tags/</link>
-    <description>Recent content in Tags on lukeindykiewicz</description>
+    <description>Recent content in Tags on luke indykiewicz</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-US</language>
+    <language>en</language>
+    <lastBuildDate>Thu, 01 Sep 2016 12:22:31 +0200</lastBuildDate><atom:link href="https://lukeindykiewicz.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>cats</title>
+      <link>https://lukeindykiewicz.github.io/tags/cats/</link>
+      <pubDate>Thu, 01 Sep 2016 12:22:31 +0200</pubDate>
+      
+      <guid>https://lukeindykiewicz.github.io/tags/cats/</guid>
+      <description></description>
+    </item>
     
-	<atom:link href="https://lukeindykiewicz.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>monads</title>
+      <link>https://lukeindykiewicz.github.io/tags/monads/</link>
+      <pubDate>Thu, 01 Sep 2016 12:22:31 +0200</pubDate>
+      
+      <guid>https://lukeindykiewicz.github.io/tags/monads/</guid>
+      <description></description>
+    </item>
     
+    <item>
+      <title>scala</title>
+      <link>https://lukeindykiewicz.github.io/tags/scala/</link>
+      <pubDate>Thu, 01 Sep 2016 12:22:31 +0200</pubDate>
+      
+      <guid>https://lukeindykiewicz.github.io/tags/scala/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>api</title>
+      <link>https://lukeindykiewicz.github.io/tags/api/</link>
+      <pubDate>Wed, 24 Aug 2016 18:30:50 +0200</pubDate>
+      
+      <guid>https://lukeindykiewicz.github.io/tags/api/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tck</title>
+      <link>https://lukeindykiewicz.github.io/tags/tck/</link>
+      <pubDate>Wed, 24 Aug 2016 18:30:50 +0200</pubDate>
+      
+      <guid>https://lukeindykiewicz.github.io/tags/tck/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>maven</title>
+      <link>https://lukeindykiewicz.github.io/tags/maven/</link>
+      <pubDate>Tue, 26 Jan 2016 18:27:31 +0100</pubDate>
+      
+      <guid>https://lukeindykiewicz.github.io/tags/maven/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>sbt</title>
+      <link>https://lukeindykiewicz.github.io/tags/sbt/</link>
+      <pubDate>Tue, 26 Jan 2016 18:27:31 +0100</pubDate>
+      
+      <guid>https://lukeindykiewicz.github.io/tags/sbt/</guid>
+      <description></description>
+    </item>
     
   </channel>
 </rss>

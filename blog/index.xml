@@ -1,26 +1,21 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Blog on lukeindykiewicz</title>
+    <title>Blogs on luke indykiewicz</title>
     <link>https://lukeindykiewicz.github.io/blog/</link>
-    <description>Recent content in Blog on lukeindykiewicz</description>
+    <description>Recent content in Blogs on luke indykiewicz</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-US</language>
-    <lastBuildDate>Thu, 01 Sep 2016 12:22:31 +0200</lastBuildDate>
-    
-	<atom:link href="https://lukeindykiewicz.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <language>en</language>
+    <lastBuildDate>Thu, 01 Sep 2016 12:22:31 +0200</lastBuildDate><atom:link href="https://lukeindykiewicz.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>free monads in business application</title>
       <link>https://lukeindykiewicz.github.io/blog/free-monads-in-business-application/</link>
       <pubDate>Thu, 01 Sep 2016 12:22:31 +0200</pubDate>
       
       <guid>https://lukeindykiewicz.github.io/blog/free-monads-in-business-application/</guid>
-      <description>What This post describes Letter Shop API implementation which uses Free Monads, exactly Free from Cats
-tl;dr show me the code
-Why There are some nice materials about free monads on the net, but I always wanted to see how such concepts, applied to regular business applications, look like. How difficult or cumbersome it is to implement some business use case using a particular concept, e.g. free monads.
-Letter Shop is my way to make business application implementation comparable.</description>
+      <description>What    This post describes Letter Shop API implementation which uses Free Monads, exactly Free from Cats
+tl;dr    show me the code
+Why    There are some nice materials about free monads on the net, but I always wanted to see how such concepts, applied to regular business applications, look like. How difficult or cumbersome it is to implement some business use case using a particular concept, e.</description>
     </item>
     
     <item>
@@ -29,8 +24,8 @@ Letter Shop is my way to make business application implementation comparable.</d
       <pubDate>Wed, 24 Aug 2016 18:30:50 +0200</pubDate>
       
       <guid>https://lukeindykiewicz.github.io/blog/letter-shop/</guid>
-      <description>What This post describes a made up application - Letter Shop, why I created it and how it was done.
-tl;dr  TCK code API code  Why Letter Shop is an attempt to make comparison of concepts possible, of course in a very practical way. I wanted to have some api/tests/problem that I can implement with different approaches (like using monads, using event sourcing, etc.). Each approach is best in a particular situation and simple examples, &amp;ldquo;hello worlds&amp;rdquo; show exactly those cases.</description>
+      <description>What    This post describes a made up application - Letter Shop, why I created it and how it was done.
+tl;dr     TCK code API code  Why    Letter Shop is an attempt to make comparison of concepts possible, of course in a very practical way. I wanted to have some api/tests/problem that I can implement with different approaches (like using monads, using event sourcing, etc.</description>
     </item>
     
     <item>
@@ -39,9 +34,9 @@ tl;dr  TCK code API code  Why Letter Shop is an attempt to make comparison of co
       <pubDate>Tue, 26 Jan 2016 18:27:31 +0100</pubDate>
       
       <guid>https://lukeindykiewicz.github.io/blog/sbt-search-maven-plugin/</guid>
-      <description>What This is a blog post about sbt plugin to query search.maven.org
-tl;dr show me the code
-Why Most development tasks can be done without leaving your favorite editor/ide nor console. Writing Scala code is no different: sbt gives you a lot of power to run code and tests, to package and publish application.
+      <description>What    This is a blog post about sbt plugin to query search.maven.org
+tl;dr    show me the code
+Why    Most development tasks can be done without leaving your favorite editor/ide nor console. Writing Scala code is no different: sbt gives you a lot of power to run code and tests, to package and publish application.
 There is one small thing though, forcing you to leave that environment and go to a browser - to find the exact name of dependency for your project.</description>
     </item>
     

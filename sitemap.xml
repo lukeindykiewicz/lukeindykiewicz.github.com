@@ -1,47 +1,63 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
-  <url>
-    <loc>https://lukeindykiewicz.github.io/blog/free-monads-in-business-application/</loc>
-    <lastmod>2016-09-01T12:22:31+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://lukeindykiewicz.github.io/blog/letter-shop/</loc>
-    <lastmod>2016-08-24T18:30:50+02:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://lukeindykiewicz.github.io/blog/sbt-search-maven-plugin/</loc>
-    <lastmod>2016-01-26T18:27:31+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://lukeindykiewicz.github.io/about/</loc>
-    <lastmod>2016-01-24T19:33:17+01:00</lastmod>
-  </url>
-  
   <url>
     <loc>https://lukeindykiewicz.github.io/blog/</loc>
     <lastmod>2016-09-01T12:22:31+02:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://lukeindykiewicz.github.io/categories/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://lukeindykiewicz.github.io/tags/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
+  </url><url>
+    <loc>https://lukeindykiewicz.github.io/tags/cats/</loc>
+    <lastmod>2016-09-01T12:22:31+02:00</lastmod>
+  </url><url>
+    <loc>https://lukeindykiewicz.github.io/blog/free-monads-in-business-application/</loc>
+    <lastmod>2016-09-01T12:22:31+02:00</lastmod>
+  </url><url>
+    <loc>https://lukeindykiewicz.github.io/free-monads-in-business-application/</loc>
+    <lastmod>2016-09-01T12:22:31+02:00</lastmod>
+  </url><url>
     <loc>https://lukeindykiewicz.github.io/</loc>
     <lastmod>2016-09-01T12:22:31+02:00</lastmod>
-    <priority>0</priority>
+  </url><url>
+    <loc>https://lukeindykiewicz.github.io/tags/monads/</loc>
+    <lastmod>2016-09-01T12:22:31+02:00</lastmod>
+  </url><url>
+    <loc>https://lukeindykiewicz.github.io/posts/</loc>
+    <lastmod>2016-09-01T12:22:31+02:00</lastmod>
+  </url><url>
+    <loc>https://lukeindykiewicz.github.io/tags/scala/</loc>
+    <lastmod>2016-09-01T12:22:31+02:00</lastmod>
+  </url><url>
+    <loc>https://lukeindykiewicz.github.io/tags/</loc>
+    <lastmod>2016-09-01T12:22:31+02:00</lastmod>
+  </url><url>
+    <loc>https://lukeindykiewicz.github.io/tags/api/</loc>
+    <lastmod>2016-08-24T18:30:50+02:00</lastmod>
+  </url><url>
+    <loc>https://lukeindykiewicz.github.io/blog/letter-shop/</loc>
+    <lastmod>2016-08-24T18:30:50+02:00</lastmod>
+  </url><url>
+    <loc>https://lukeindykiewicz.github.io/letter-shop/</loc>
+    <lastmod>2016-08-24T18:30:50+02:00</lastmod>
+  </url><url>
+    <loc>https://lukeindykiewicz.github.io/tags/tck/</loc>
+    <lastmod>2016-08-24T18:30:50+02:00</lastmod>
+  </url><url>
+    <loc>https://lukeindykiewicz.github.io/tags/maven/</loc>
+    <lastmod>2016-01-26T18:27:31+01:00</lastmod>
+  </url><url>
+    <loc>https://lukeindykiewicz.github.io/tags/sbt/</loc>
+    <lastmod>2016-01-26T18:27:31+01:00</lastmod>
+  </url><url>
+    <loc>https://lukeindykiewicz.github.io/blog/sbt-search-maven-plugin/</loc>
+    <lastmod>2016-01-26T18:27:31+01:00</lastmod>
+  </url><url>
+    <loc>https://lukeindykiewicz.github.io/sbt-search-maven-plugin/</loc>
+    <lastmod>2016-01-26T18:27:31+01:00</lastmod>
+  </url><url>
+    <loc>https://lukeindykiewicz.github.io/about/</loc>
+    <lastmod>2016-01-24T19:33:17+01:00</lastmod>
+  </url><url>
+    <loc>https://lukeindykiewicz.github.io/categories/</loc>
+  </url><url>
+    <loc>https://lukeindykiewicz.github.io/series/</loc>
   </url>
-  
 </urlset>

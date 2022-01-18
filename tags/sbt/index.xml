@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>sbt on luke indykiewicz</title>
+    <link>https://lukeindykiewicz.github.io/tags/sbt/</link>
+    <description>Recent content in sbt on luke indykiewicz</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 26 Jan 2016 18:27:31 +0100</lastBuildDate><atom:link href="https://lukeindykiewicz.github.io/tags/sbt/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>sbt search maven plugin</title>
+      <link>https://lukeindykiewicz.github.io/sbt-search-maven-plugin/</link>
+      <pubDate>Tue, 26 Jan 2016 18:27:31 +0100</pubDate>
+      
+      <guid>https://lukeindykiewicz.github.io/sbt-search-maven-plugin/</guid>
+      <description>What    This is a blog post about sbt plugin to query search.maven.org
+tl;dr    show me the code
+Why    Most development tasks can be done without leaving your favorite editor/ide nor console. Writing Scala code is no different: sbt gives you a lot of power to run code and tests, to package and publish application.
+There is one small thing though, forcing you to leave that environment and go to a browser - to find the exact name of dependency for your project.</description>
+    </item>
+    
+  </channel>
+</rss>
